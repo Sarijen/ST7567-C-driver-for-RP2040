@@ -12,6 +12,7 @@ pico_sdk_init()
 
 add_executable(ST7567
   src/ST7567.c
+  examples/beta_example.c
 )
 
 target_link_libraries(ST7567 pico_stdlib hardware_spi hardware_gpio)
