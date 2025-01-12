@@ -1,16 +1,28 @@
 #include "ST7567.h"
 
-int displayInverted = 0;
-
 uint8_t frameBuffer[1024]; // Contains 128x bytes, 16 bytes for each Page
 
-uint8_t setPageAddr =   0b10110000;
-uint8_t setColAddrH =   0b00010000;
-uint8_t setColAddrL =   0b00000000; 
-uint8_t invertDisplay = 0b10100111;
-uint8_t NOP =           0b11100011;
-uint8_t blankData =     0b00000000;
+// Commands defined in binary for clear understanding
+const uint8_t setPageAddr =   0b10110000;
+const uint8_t setColAddrH =   0b00010000;
+const uint8_t setColAddrL =   0b00000000; 
+const uint8_t invertDisplay = 0b10100111;
+int displayInverted = 0;
+const uint8_t NOP =           0b11100011;
+const uint8_t displayON =     0b10101111;
+const uint8_t displayOFF =    0b10101110;
+const uint8_t allPixelON =    0b10100100;
+const uint8_t selectBias =    0b10100011; 
+const uint8_t segDirection =  0b10100000; // | 0x01 for inverse
+const uint8_t comDirection =  0b11000000; // | 0x08 for inverse
+const uint8_t EVmode =        0b10000001;
+const uint8_t EVset =         0b00000000;
+const uint8_t REGratio =      0b00100010;
+const uint8_t powerControl =  0b00101111;
+const uint8_t setStartLine =  0b01000000; 
 
+const uint8_t blankData =     0b00000000;
+ 
 void lcd_fill_rect(int x, int y, int width, int height) {
   int dx = x + width;
   int dy = y + height;
@@ -114,24 +126,11 @@ inline void send_data(uint8_t data) {
   gpio_put(pin.DC, 0);
 }
 
-
 void lcd_init() {
   gpio_put(pin.RST, 0);
   sleep_us(6);
   gpio_put(pin.RST, 1);
   sleep_us(6);
-
-  uint8_t displayON =     0b10101111;
-  uint8_t displayOFF =    0b10101110;
-  uint8_t allPixelON =    0b10100100;
-  uint8_t selectBias =    0b10100011; 
-  uint8_t segDirection =  0b10100000; // | 0x01 for inverse
-  uint8_t comDirection =  0b11000000; // | 0x08 for inverse
-  uint8_t EVmode =        0b10000001;
-  uint8_t EVset =         0b00000000;
-  uint8_t REGratio =      0b00100010;
-  uint8_t powerControl =  0b00101111;
-  uint8_t setStartLine =  0b01000000; 
 
   send_command(displayOFF);
   send_command(selectBias);
