@@ -14,8 +14,10 @@
 #define CS_PIN 6
 #define RST_PIN 7 // Hardware Reset
 */
+
 #define LCD_WIDTH 128
 #define LCD_HEIGHT 64
+
 
 typedef struct {
   const int MOSI;
@@ -33,6 +35,7 @@ void lcd_spi_init(spi_inst_t*, uint frequency); // in kHz
 void lcd_init();
 void lcd_clear();
 void lcd_display();
+void lcd_invert();
 void lcd_draw_pixel(int x, int y);
 void lcd_draw_line(int x1, int y1, int x2, int y2);
 void lcd_draw_rect(int x, int y, int width, int height);
