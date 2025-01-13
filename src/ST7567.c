@@ -126,11 +126,15 @@ inline void send_data(uint8_t data) {
   gpio_put(pin.DC, 0);
 }
 
-void lcd_init() {
+void lcd_reset() {
   gpio_put(pin.RST, 0);
-  sleep_us(6);
+  sleep_us(3);
   gpio_put(pin.RST, 1);
-  sleep_us(6);
+  sleep_us(3);
+}
+
+void lcd_init() {
+  lcd_reset();
 
   send_command(displayOFF);
   send_command(selectBias);
