@@ -25,7 +25,8 @@ void send_data(uint8_t data);
 void lcd_spi_init(spi_inst_t*, uint frequency); // in kHz
 void lcd_init();
 void lcd_reset();
-void lcd_clear();
+void lcd_clear_screen();
+void lcd_clear_buffer();
 void lcd_display();
 void lcd_invert();
 void lcd_draw_pixel(int x, int y);

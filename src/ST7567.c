@@ -22,7 +22,7 @@ const uint8_t powerControl =  0b00101111;
 const uint8_t setStartLine =  0b01000000; 
 
 const uint8_t blankData =     0b00000000;
- 
+
 void lcd_fill_rect(int x, int y, int width, int height) {
   int dx = x + width;
   int dy = y + height;
@@ -48,22 +48,22 @@ void lcd_draw_rect(int x, int y, int width, int height) {
 }
 
 void lcd_draw_line(int x1, int y1, int x2, int y2) { // Bresenham's algorithm used
-  int dx = abs(x2 - x1);
+  int dx = abs(x2 - x1); 
   int dy = abs(y2 - y1);
   int sx = (x1 < x2) ? 1 : -1;
   int sy = (y1 < y2) ? 1 : -1;
-  int err = dx - dy;
+  int error = dx - dy;
 
-  while (x1 != x2 && y1 != y2) {
-    lcd_draw_pixel(x1, y1); 
+  while (x1 != x2 || y1 != y2) {
+    lcd_draw_pixel(x1, y1);
 
-    int e2 = 2 * err;
+    int e2 = 2*error;
     if (e2 > -dy) {
-      err -= dy;
+      error -= dy;
       x1 += sx;
     }
-    if (e2 < dx) {
-      err += dx;
+    if (e2< dx) {
+      error += dx;
       y1 += sy;
     }
   }
@@ -75,7 +75,7 @@ void lcd_draw_pixel(int x, int y) { // Calculates x, y to bits location in the b
   int byte_index = (128 * page + x);
   int bit_offset = (y % 8);
   frameBuffer[byte_index] |= (1 << bit_offset);
-//  lcd_display(); // Sends the entire buffer after every pixel draw, VERY SLOW!
+  //  lcd_display(); // Sends the entire buffer after every pixel draw, VERY SLOW!
 }
 
 void lcd_invert() {
@@ -100,7 +100,13 @@ void lcd_display() {
   }
 }
 
-void lcd_clear() { // Writes 0s to the display, not touching framebuffer
+void lcd_clear_buffer() { // Fills the buffer on MC with 0s
+  for (int byte = 0; byte < 1024; byte++) {
+    frameBuffer[byte] = blankData;
+  }
+}
+
+void lcd_clear_screen() { // Fills the screen with 0s
   for (int currentPage = 0; currentPage < 8; currentPage++) {
     send_command(setPageAddr | currentPage);
     send_command(setColAddrH); 
