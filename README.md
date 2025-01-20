@@ -4,11 +4,10 @@ It includes functions for initializing the display and drawing graphics using a 
 
 
 ## Features
-- 1024 Bytes long framebuffer
-- Drawing shape functions for lines, rectangles and even individual pixels
+- Clearable and easily writable Framebuffer 
+- Drawing shape functions for lines, rectangles, circles and even individual pixels
 - Drawing various fonts (To be done)
 - Displaying bitmap images (To be done)
-- Clearing the screen without touching the buffer
 
 
 ## Usage
