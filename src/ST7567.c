@@ -169,11 +169,12 @@ void lcd_spi_init(spi_inst_t* spi, uint frequency) {
 
   gpio_put(pin.CS, 1); 
   gpio_put(pin.DC, 0);
+  gpio_put(pin.RST, 1);
 
   spi_init(spi, 1000 * frequency);
   gpio_set_function(pin.MOSI, GPIO_FUNC_SPI);
   gpio_set_function(pin.SCLK, GPIO_FUNC_SPI);
-  spi_set_format(spi_default,
+  spi_set_format(spi,
     8,             // 8 bits per transfer
     SPI_CPOL_0,    // Clock polarity 
     SPI_CPHA_0,    // Clock phase 
