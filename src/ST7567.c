@@ -80,7 +80,7 @@ void lcd_draw_pixel(int x, int y) { // Calculates x, y to bits location in the b
 
 void lcd_invert() {
   if (displayInverted) {
-    send_command(0b10100110); // Flips the last bit
+    send_command(invertDisplay & ~1); // Flips the last bit
     displayInverted = 0;
   } else {
     send_command(invertDisplay);
