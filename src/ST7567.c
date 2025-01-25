@@ -23,6 +23,22 @@ const uint8_t setStartLine =  0b01000000;
 
 const uint8_t blankData =     0b00000000;
 
+void lcd_draw_image(uint8_t* image, int x, int y, int width, int height) {
+  int imageSize = (width * height) / 8;
+  int currentByte = 0;
+  for (int col = x; col < (x + width); col++) {
+    for (int page = y / 8; page < (y + height) / 8; page++) {
+      send_command(setPageAddr | page);
+      send_command(setColAddrH | (col >> 4));
+      send_command(setColAddrL | (col & 0xF));
+      if (currentByte < imageSize) {
+        send_data(image[currentByte]);
+        currentByte++;
+      }  
+    }
+  }
+}
+
 void lcd_fill_rect(int x, int y, int width, int height) {
   int dx = x + width;
   int dy = y + height;
@@ -35,7 +51,7 @@ void lcd_fill_rect(int x, int y, int width, int height) {
 }
 
 void lcd_draw_rect(int x, int y, int width, int height) {
-  int dx = x + width;
+  int dx = x + width; 
   int dy = y + height;
 
   for (int i = x; i < dx; i++) {

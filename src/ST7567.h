@@ -33,5 +33,6 @@ void lcd_draw_pixel(int x, int y);
 void lcd_draw_line(int x1, int y1, int x2, int y2);
 void lcd_draw_rect(int x, int y, int width, int height);
 void lcd_fill_rect(int x, int y, int width, int height);
+void lcd_draw_image(uint8_t* image, int x, int y, int width, int height);
 
 #endif 
