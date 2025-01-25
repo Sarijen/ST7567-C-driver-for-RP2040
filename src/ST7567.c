@@ -34,7 +34,7 @@ void lcd_draw_image(uint8_t* image, int x, int y, int width, int height) {
       if (currentByte < imageSize) {
         send_data(image[currentByte]);
         currentByte++;
-      }  
+      } else {break;} 
     }
   }
 }
