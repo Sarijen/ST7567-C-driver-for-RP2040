@@ -7,7 +7,7 @@ It includes functions for initializing the display and drawing graphics using a 
 - Clearable and easily writable Framebuffer 
 - Drawing shape functions for lines, rectangles, circles and even individual pixels
 - Drawing various fonts (To be done)
-- Displaying bitmap images (To be done)
+- Displaying images
 
 
 ## Usage
