@@ -24,17 +24,18 @@ const uint8_t setStartLine =  0b01000000;
 const uint8_t blankData =     0b00000000;
 
 void lcd_draw_image(uint8_t* image, int x, int y, int width, int height) {
-  int imageSize = (width * height) / 8;
   int currentByte = 0;
-  for (int col = x; col < (x + width); col++) {
-    for (int page = y / 8; page < (y + height) / 8; page++) {
-      send_command(setPageAddr | page);
-      send_command(setColAddrH | (col >> 4));
-      send_command(setColAddrL | (col & 0xF));
-      if (currentByte < imageSize) {
-        send_data(image[currentByte]);
-        currentByte++;
-      } else {break;} 
+  for (int i = x; i < x + width; i++) { // Individual columns
+    int currentY = y;
+    for (int j = 0; j < (height / 8); j++) {  // Individual bytes in 1 col
+      for (int bit = 7; bit >= 0; bit--) {  // Individual bits in 1 byte
+        // If the bit is NOT 1, draw pixel (inverted)
+        if (!((image[currentByte] >> bit) & 1)) {
+          lcd_draw_pixel(i, currentY); 
+        }
+        currentY++;
+      }
+      currentByte++;
     }
   }
 }
