@@ -4,6 +4,7 @@
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
 #include "hardware/gpio.h"
+#include "hardware/pwm.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -20,11 +21,19 @@ typedef struct {
 
 extern pinConfig pin;
 
+typedef struct {
+  int slice_num;
+  int wrapping_point;
+  int pin;
+} pwmConfig;
+
 void send_command(uint8_t command);
 void send_data(uint8_t data);
 void lcd_spi_init(spi_inst_t*, uint frequency); // in kHz
 void lcd_init();
 void lcd_reset();
+void lcd_enable_pwm_brigthness(int pin, int frequency); // frequency in kHz
+void lcd_set_brigthness(int duty_cycle); // in %
 void lcd_clear_screen();
 void lcd_clear_buffer();
 void lcd_display();
