@@ -10,6 +10,7 @@
 
 #define LCD_WIDTH 128
 #define LCD_HEIGHT 64
+#define NUM_PAGES 8
 
 typedef struct {
   const int MOSI;
@@ -37,7 +38,7 @@ void lcd_set_brigthness(int duty_cycle); // in %
 void lcd_clear_screen();
 void lcd_clear_buffer();
 void lcd_display();
-void lcd_invert();
+void lcd_toggle_invert();
 void lcd_draw_pixel(int x, int y);
 void lcd_draw_line(int x1, int y1, int x2, int y2);
 void lcd_draw_rect(int x, int y, int width, int height);

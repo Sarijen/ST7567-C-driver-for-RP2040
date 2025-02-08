@@ -1,6 +1,6 @@
 #include "ST7567.h"
 
-uint8_t frameBuffer[1024]; // Contains 128x bytes, 16 bytes for each Page
+uint8_t frameBuffer[NUM_PAGES * LCD_WIDTH]; // contains 1024 Bytes, 128 Bytes per page
 
 // Commands defined in binary for clear understanding
 const uint8_t setPageAddr =   0b10110000;
@@ -95,7 +95,7 @@ void lcd_draw_pixel(int x, int y) { // Calculates x, y to bits location in the b
   //  lcd_display(); // Sends the entire buffer after every pixel draw, VERY SLOW!
 }
 
-void lcd_invert() {
+void lcd_toggle_invert() {
   if (displayInverted) {
     send_command(invertDisplay & ~1); // Flips the last bit
     displayInverted = 0;
