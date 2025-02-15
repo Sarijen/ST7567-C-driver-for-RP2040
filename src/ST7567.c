@@ -117,7 +117,7 @@ void lcd_display() {
   }
 }
 
-void lcd_clear_buffer() { // Fills the buffer on MC with 0s
+void lcd_clear_buffer() { // Fills the buffer on MCU with 0s
   for (int byte = 0; byte < 1024; byte++) {
     frameBuffer[byte] = blankData;
   }
@@ -149,7 +149,11 @@ inline void send_data(uint8_t data) {
   gpio_put(pin.DC, 0);
 }
 
-pwmConfig pwm = {-1, 0, 15};
+pwmConfig pwm = {
+  -1, // slice num (-1 if doesn't exist)
+  0,  // wrapping point
+  15  // pin number
+};
 
 void lcd_enable_pwm_brigthness(int pin, int frequency) {
   pwm.pin = pin;
