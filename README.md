@@ -10,11 +10,6 @@ It includes functions for initializing the display and drawing graphics using a 
 - Displaying images
 - PWM dimmable backlight
 
-
-## Usage
-(To be done)
-
-
 ## Wiring Diagram
 
 <img src="images/wiringDiagram.png" width="500"/>
@@ -31,3 +26,20 @@ It includes functions for initializing the display and drawing graphics using a 
 | GND | NC/LED |
 
 Connect NC or LED pin to ground to enable backlight, use a resistor to adjust the brightness.
+
+## Usage
+
+### Built-in examples
+1. Make sure you have [pico SDK](https://github.com/raspberrypi/pico-sdk) installed and working on your machine
+2. Run these commands
+```
+git clone https://github.com/Sarijen/ST7567-C-driver-for-RP2040
+cd ST7567-C-driver-for-RP2040
+mkdir build
+cmake ..
+make
+```
+3. Flash the .uf2 file onto the RP2040 
+
+### Integrating into your codebase
+1. TO-DO
