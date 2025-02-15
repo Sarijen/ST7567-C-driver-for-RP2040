@@ -25,8 +25,8 @@ It includes functions for initializing the display and drawing graphics using a 
 | Any GPIO | RST |
 | GND | NC/LED |
 
-Connect NC or LED pin to ground to enable backlight
-For PWM dimming use a BJT transistor/MOSFET, connecting base to any GPIO, Collector/Emmittor to GND and NC/LED depending on your part 
+Connect NC or LED pin to ground to enable backlight.
+For PWM dimming use a BJT transistor/MOSFET, connecting base to any GPIO, Collector/Emmittor to GND and NC/LED depending on your part. 
 
 ## Usage
 
@@ -41,7 +41,7 @@ cd build
 cmake ..
 make
 ```
-3. Flash the .uf2 located in the same directory 
+3. Flash the .uf2 located in the same directory. 
 
 ### Integrating into your codebase
 1. TO-DO
