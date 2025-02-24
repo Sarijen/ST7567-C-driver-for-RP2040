@@ -26,7 +26,8 @@ It includes functions for initializing the display and drawing graphics using a 
 | GND | NC/LED |
 
 Connect NC or LED pin to ground to enable backlight.
-For PWM dimming use a BJT transistor/MOSFET, connecting base to any GPIO, Collector/Emmittor to GND and NC/LED depending on your part. 
+
+For PWM dimming use a transistor/MOSFET, connecting base to any GPIO, Collector/Emitter to GND and NC/LED depending on your part. 
 
 ## Usage
 
