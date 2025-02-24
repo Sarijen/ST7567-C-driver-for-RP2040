@@ -5,9 +5,9 @@ It includes functions for initializing the display and drawing graphics using a 
 
 ## Features
 - Clearable and easily writable Framebuffer 
-- Drawing shape functions for lines, rectangles, circles and even individual pixels
+- Drawing shape functions for lines, rectangles, circles and individual pixels
 - Drawing various fonts (To be done)
-- Displaying images
+- Displaying bitmap images
 - PWM dimmable backlight
 
 ## Wiring Diagram
@@ -25,9 +25,9 @@ It includes functions for initializing the display and drawing graphics using a 
 | Any GPIO | RST |
 | GND | NC/LED |
 
-Connect NC or LED pin to ground to enable backlight.
+Connect NC/LED pin to GND to enable backlight.
 
-For PWM dimming use a transistor/MOSFET, connecting base to any GPIO, Collector/Emitter to GND and NC/LED depending on your part. 
+For PWM dimming use a transistor/MOSFET, connecting base to any GPIO, Collector/Emitter to GND and NC/LED.
 
 ## Usage
 
