@@ -33,19 +33,27 @@ For PWM dimming use a transistor/MOSFET, connecting base to any GPIO, Collector/
 
 ### Built-in examples
 1. Make sure you have [pico SDK](https://github.com/raspberrypi/pico-sdk) installed and working on your machine
-2. Run these commands
-```
-git clone https://github.com/Sarijen/ST7567-C-driver-for-RP2040
-cd ST7567-C-driver-for-RP2040
-mkdir build
-cd build
-cmake ..
-make
-```
+2. Clone this repo 
+    ```
+    git clone https://github.com/Sarijen/ST7567-C-driver-for-RP2040
+    cd ST7567-C-driver-for-RP2040
+    ```
+3. Set your pico-sdk path with
+    ```
+    export PICO_SDK_PATH=path/to/your/pico-sdk/
+    ```
+4. Choose an example by uncommenting only 1 example in CMakeLists.txt
+5. build and compile with
+    ```
+    mkdir build
+    cd build
+    cmake ..
+    make
+    ```
 3. Flash the ST7567_example.uf2 located in the same directory. 
 
 ### Integrating into your codebase
-1. git clone this repo inside your project
+1. Clone this repo inside your project
 
 2. modify your CMakeLists.txt 
 add the library directory using
