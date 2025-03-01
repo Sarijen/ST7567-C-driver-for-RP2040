@@ -52,11 +52,11 @@ add the library directory using
     ``` 
     add_subdirectory(ST7567-C-driver-for-RP2040)
     ```
-and add ST7567_driver to target_link_libraries
+    and add ST7567_driver to target_link_libraries
 
-3. include header
+3. include header in your .c file
     ```
     #include "ST7567.h"
     ```
 
-4. Init and use the library, see examples/ to see how
+4. Properly use the library, check examples/ to see how
