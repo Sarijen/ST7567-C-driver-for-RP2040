@@ -1,2 +1,2 @@
-build
-examples # Ignore until done
+build/
+examples/ # Ignore until done
