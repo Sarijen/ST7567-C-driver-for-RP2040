@@ -33,9 +33,8 @@ For PWM dimming use a transistor/MOSFET, connecting base to any GPIO, Collector/
 
 ### Built-in examples
 1. Make sure you have [pico SDK](https://github.com/raspberrypi/pico-sdk) installed and working on your machine
-2. Clone this repo 
-3. Set your `PICO_SDK_PATH`
-4. Choose an example by uncommenting only 1 example in CMakeLists.txt
+2. Clone this repo and set `PICO_SDK_PATH` in it
+3. Choose 1 example by uncommenting it in CMakeLists.txt
 5. build and compile using
 
     ```
