@@ -42,7 +42,18 @@ cd build
 cmake ..
 make
 ```
-3. Flash the .uf2 located in the same directory. 
+3. Flash the ST7567_example.uf2 located in the same directory. 
 
 ### Integrating into your codebase
-1. TO-DO
+1. git clone this repo inside your project
+2. modify your CMakeLists.txt 
+adding the library directory using
+``` 
+add_subdirectory(ST7567-C-driver-for-RP2040)
+```
+and adding ST7567_driver to target_link_libraries
+3. include header
+```
+#include "ST7567.h"
+```
+4. Init and use the library, see examples/ to see how
