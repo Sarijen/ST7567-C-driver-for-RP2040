@@ -1,12 +1,11 @@
-# ST7567 driver for the RPi Pico (RP2040)
+# ST7567 driver for RPi Pico (RP2040)
 This driver allows you to control an LCD using SPI with the RP2040 MCU.
-It includes functions for initializing the display, drawing graphics using a framebuffer and PWM controlable backlight.
-
+It includes functions for initializing the display, drawing graphics using a framebuffer, controlable backlight and more.
 
 # Features
 - Clearable and easily writable Framebuffer 
 - Drawing shape functions for lines, rectangles, circles and individual pixels
-- Drawing various fonts (To be done)
+- Drawing various fonts
 - Displaying bitmap images
 - PWM dimmable backlight
 
@@ -31,7 +30,7 @@ For PWM dimming use a transistor/MOSFET, connecting base to any GPIO, Collector/
 
 # Usage
 
-## Built-in examples
+## Built-in example code
 1. Make sure you have [pico SDK](https://github.com/raspberrypi/pico-sdk) installed and working on your machine
 2. Clone this repo and set `PICO_SDK_PATH` in it
 3. Choose 1 example by uncommenting it in CMakeLists.txt
@@ -51,11 +50,11 @@ For PWM dimming use a transistor/MOSFET, connecting base to any GPIO, Collector/
 
 2. modify your CMakeLists.txt 
 
-    1. add the library directory using
+    add the library directory using
     ``` 
     add_subdirectory(ST7567-C-driver-for-RP2040)
     ```
-    2. add ST7567_driver to target_link_libraries
+    add ST7567_driver to target_link_libraries
 
 3. include header in your .c file
     ```
