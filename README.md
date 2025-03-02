@@ -50,7 +50,8 @@ For PWM dimming use a transistor/MOSFET, connecting base to any GPIO, Collector/
 1. Clone this repo inside your project
 
 2. modify your CMakeLists.txt 
-add the library directory using
+
+    add the library directory using
     ``` 
     add_subdirectory(ST7567-C-driver-for-RP2040)
     ```
