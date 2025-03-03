@@ -160,8 +160,8 @@ inline void send_data(uint8_t data) {
 
 pwmConfig pwm = {
   -1, // slice num (-1 if doesn't exist)
-  0,  // wrapspi. point
-  15  // spi.number
+  0,  // wrapping point
+  15  // pin number
 };
 
 void lcd_enable_pwm_brigthness(uint8_t pin, int frequency) {
