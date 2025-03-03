@@ -17,8 +17,8 @@ target_link_libraries(ST7567 pico_stdlib hardware_spi hardware_gpio hardware_pwm
 add_executable(ST7567_example
   src/ST7567.c
 # examples/animation.c
-  examples/basics.c
-# examples/beta_example.c
+# examples/basics.c
+ examples/beta_example.c
 # examples/fonts.c
 # examples/shapes.c
 # examples/images.c

@@ -164,18 +164,21 @@ void lcd_enable_pwm_brigthness(int pin, int frequency) {
   pwm_set_wrap(pwm.slice_num, pwm.wrapping_point);
 }
 
-void lcd_set_brigthness(int duty_cycle) {
+void lcd_set_brightness(int duty_cycle) {
   if (pwm.slice_num == -1) { return; }
   if (duty_cycle == 0) {
     pwm_set_enabled(pwm.slice_num, false);
     return;
   }
 
-  int on_time = (duty_cycle * pwm.wrapping_point) / 100;
+  // Duty cycle / 100 converts % to decimal, so we can multiply it with wrapping point
+  // We multiply duty cycle first and then convert, thus avoiding floating-point operations
+  int time_ON = (duty_cycle * pwm.wrapping_point) / 100;
+
   if ((pwm.pin % 2) == 0) { // Even pins are channel A, B are odd
-    pwm_set_chan_level(pwm.slice_num, PWM_CHAN_A, on_time);
+    pwm_set_chan_level(pwm.slice_num, PWM_CHAN_A, time_ON);
   } else {
-    pwm_set_chan_level(pwm.slice_num, PWM_CHAN_B, on_time);
+    pwm_set_chan_level(pwm.slice_num, PWM_CHAN_B, time_ON);
   }
   pwm_set_enabled(pwm.slice_num, true);
 }
