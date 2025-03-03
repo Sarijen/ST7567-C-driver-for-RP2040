@@ -1,5 +1,14 @@
 #include "ST7567.h"
 
+spiConfig spi = {
+  0, // SPI instance
+  0, // MOSI pin
+  0, // SCLK pin
+  0, // DC pin
+  0, // CS pin
+  0, // RST pin
+};
+
 uint8_t frameBuffer[NUM_PAGES * LCD_WIDTH]; // contains 1024 Bytes, 128 Bytes per page
 
 // Commands defined in binary for clear understanding
@@ -44,7 +53,7 @@ void lcd_fill_rect(int x, int y, int width, int height) {
   int dx = x + width;
   int dy = y + height;
 
-  for (int i = x; i < dx; i++) { // We supplement x, y with i, j so they reset after looping
+  for (int i = x; i < dx; i++) { // We supplement x, y with i, j so they reset after loospi.
     for (int j = y; j < dy; j++) {
       lcd_draw_pixel(i, j);
     }            //  x  y
@@ -136,26 +145,26 @@ void lcd_clear_screen() { // Fills the screen with 0s
 }
 
 inline void send_command(uint8_t command) {
-  gpio_put(pin.CS, 0);
-  spi_write_blocking(spi0, &command, 1);
-  gpio_put(pin.CS, 1);
+  gpio_put(spi.CS, 0);
+  spi_write_blocking(spi.ID, &command, 1);
+  gpio_put(spi.CS, 1);
 }
 
 inline void send_data(uint8_t data) {
-  gpio_put(pin.DC, 1);
-  gpio_put(pin.CS, 0);
-  spi_write_blocking(spi0, &data, 1);
-  gpio_put(pin.CS, 1);
-  gpio_put(pin.DC, 0);
+  gpio_put(spi.DC, 1);
+  gpio_put(spi.CS, 0);
+  spi_write_blocking(spi.ID, &data, 1);
+  gpio_put(spi.CS, 1);
+  gpio_put(spi.DC, 0);
 }
 
 pwmConfig pwm = {
   -1, // slice num (-1 if doesn't exist)
-  0,  // wrapping point
-  15  // pin number
+  0,  // wrapspi. point
+  15  // spi.number
 };
 
-void lcd_enable_pwm_brigthness(int pin, int frequency) {
+void lcd_enable_pwm_brigthness(uint8_t pin, int frequency) {
   pwm.pin = pin;
   pwm.wrapping_point = 1000000 / (frequency * 8);  
   
@@ -171,7 +180,7 @@ void lcd_set_brightness(int duty_cycle) {
     return;
   }
 
-  // Duty cycle / 100 converts % to decimal, so we can multiply it with wrapping point
+  // Duty cycle / 100 converts % to decimal, so we can multiply it with wrapspi. point
   // We multiply duty cycle first and then convert, thus avoiding floating-point operations
   int time_ON = (duty_cycle * pwm.wrapping_point) / 100;
 
@@ -184,9 +193,9 @@ void lcd_set_brightness(int duty_cycle) {
 }
 
 void lcd_reset() {
-  gpio_put(pin.RST, 0);
+  gpio_put(spi.RST, 0);
   sleep_us(3);
-  gpio_put(pin.RST, 1);
+  gpio_put(spi.RST, 1);
   sleep_us(3);
 }
 
@@ -209,23 +218,40 @@ void lcd_init() {
   send_command(allPixelON);
 }
 
-void lcd_spi_init(spi_inst_t* spi, uint frequency) {
-  gpio_init(pin.DC);
-  gpio_init(pin.CS);
-  gpio_init(pin.RST);
 
-  gpio_set_dir(pin.DC, GPIO_OUT);
-  gpio_set_dir(pin.CS, GPIO_OUT);
-  gpio_set_dir(pin.RST, GPIO_OUT);
 
-  gpio_put(pin.CS, 1); 
-  gpio_put(pin.DC, 0);
-  gpio_put(pin.RST, 1);
+void lcd_spi_init(
+    spi_inst_t* spi_id, 
+    uint8_t MOSI,
+    uint8_t SCLK,
+    uint8_t DC,
+    uint8_t CS,
+    uint8_t RST,
+    uint16_t frequency) {
 
-  spi_init(spi, 1000 * frequency);
-  gpio_set_function(pin.MOSI, GPIO_FUNC_SPI);
-  gpio_set_function(pin.SCLK, GPIO_FUNC_SPI);
-  spi_set_format(spi,
+  spi.ID = spi_id;
+  spi.MOSI = MOSI;
+  spi.SCLK = SCLK;
+  spi.DC = DC;
+  spi.CS = CS;
+  spi.RST = RST;
+
+  gpio_init(spi.DC);
+  gpio_init(spi.CS);
+  gpio_init(spi.RST);
+
+  gpio_set_dir(spi.DC, GPIO_OUT);
+  gpio_set_dir(spi.CS, GPIO_OUT);
+  gpio_set_dir(spi.RST, GPIO_OUT);
+
+  gpio_put(spi.CS, 1); 
+  gpio_put(spi.DC, 0);
+  gpio_put(spi.RST, 1);
+
+  spi_init(spi.ID, 1000 * frequency);
+  gpio_set_function(spi.MOSI, GPIO_FUNC_SPI);
+  gpio_set_function(spi.SCLK, GPIO_FUNC_SPI);
+  spi_set_format(spi.ID,
     8,             // 8 bits per transfer
     SPI_CPOL_0,    // Clock polarity 
     SPI_CPHA_0,    // Clock phase 

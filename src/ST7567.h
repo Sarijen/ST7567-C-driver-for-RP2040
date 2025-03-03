@@ -13,14 +13,13 @@
 #define NUM_PAGES 8
 
 typedef struct {
-  const int MOSI;
-  const int SCLK;
-  const int DC;
-  const int CS;
-  const int RST;
-} pinConfig;
-
-extern pinConfig pin;
+  spi_inst_t* ID; // SPI instance (spi0/spi1)
+  uint8_t MOSI;
+  uint8_t SCLK;
+  uint8_t DC;
+  uint8_t CS;
+  uint8_t RST;
+} spiConfig;
 
 typedef struct {
   int slice_num;
@@ -30,10 +29,18 @@ typedef struct {
 
 void send_command(uint8_t command);
 void send_data(uint8_t data);
-void lcd_spi_init(spi_inst_t*, uint frequency); // in kHz
+void lcd_spi_init(
+    spi_inst_t* spi_id,
+    uint8_t MOSI,
+    uint8_t SCLK,
+    uint8_t DC,
+    uint8_t CS,
+    uint8_t RST,
+    uint16_t frequency); // in kHz
+
 void lcd_init();
 void lcd_reset();
-void lcd_enable_pwm_brigthness(int pin, int frequency); // frequency in kHz
+void lcd_enable_pwm_brigthness(uint8_t pin, int frequency); // frequency in kHz
 void lcd_set_brightness(int duty_cycle); // in %
 void lcd_clear_screen();
 void lcd_clear_buffer();
