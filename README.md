@@ -13,7 +13,7 @@ It includes functions for initializing the display, drawing graphics using a fra
 
 <img src="images/wiringDiagram.png" width="500"/>
 
-| Pico Pin | Display Pin  |
+| Pico | Display |
 | :------: |:----:|
 | 3V3(OUT) | 3V3 |
 | GND | GND |
@@ -24,15 +24,15 @@ It includes functions for initializing the display, drawing graphics using a fra
 | Any GPIO | RST |
 | GND | NC/LED |
 
-Connect NC/LED pin to GND to enable backlight.
+Connect `NC/LED` pin to `GND` to enable backlight.
 
-For PWM dimming use a transistor/MOSFET, connecting base to any GPIO, Collector/Emitter to GND and NC/LED.
+For PWM dimming use a transistor/MOSFET, connecting base to `any GPIO`, Collector/Emitter to `GND` and `NC/LED`.
 
 # Usage
 
 ## Built-in example code
 1. Make sure you have [pico SDK](https://github.com/raspberrypi/pico-sdk) installed and working on your machine
-2. Clone this repo and set `PICO_SDK_PATH` in it
+2. `git clone` this repo and set `PICO_SDK_PATH` in it
 3. Choose 1 example by uncommenting it in CMakeLists.txt
 5. build and compile using
 
@@ -46,7 +46,7 @@ For PWM dimming use a transistor/MOSFET, connecting base to any GPIO, Collector/
 3. Flash the ST7567_example.uf2 located in the same directory. 
 
 ## Integrating into your codebase
-1. Clone this repo inside your project
+1. `git clone` this repo inside your project
 
 2. modify your CMakeLists.txt 
 
@@ -54,7 +54,7 @@ For PWM dimming use a transistor/MOSFET, connecting base to any GPIO, Collector/
     ``` 
     add_subdirectory(ST7567-C-driver-for-RP2040)
     ```
-    add ST7567_driver to target_link_libraries
+    add `ST7567_driver` to target_link_libraries
 
 3. include header in your .c file
     ```
