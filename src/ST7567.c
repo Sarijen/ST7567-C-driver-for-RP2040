@@ -160,7 +160,14 @@ void lcd_enable_pwm_brigthness(uint8_t pin, int frequency) {
 }
 
 void lcd_set_brightness(int duty_cycle) {
-  if (pwm.slice_num == -1) { return; }
+  if (pwm.slice_num == -1) {
+    printf("Error: You need to call lcd_enable_pwm_brigthness() first!\n");
+    return;
+  }
+  if (duty_cycle < 0 || duty_cycle > 100) {
+    printf("Error: Brightness must be between 1 and 100 inclusive!\n");
+    return;
+  }
   if (duty_cycle == 0) {
     pwm_set_enabled(pwm.slice_num, false);
     return;
@@ -180,7 +187,7 @@ void lcd_set_brightness(int duty_cycle) {
 
 void lcd_set_contrast(uint8_t value) {
   if (value > 63) {
-    printf("Error: Value %d is outside the allowed range for contrast");
+    printf("Error: Value %d is outside the allowed range for contrast", value);
     return;
   }
   send_command(EVmode);
@@ -235,6 +242,10 @@ void lcd_spi_init(
     uint8_t CS,
     uint8_t RST,
     uint16_t frequency) {
+
+  if (frequency > 20000) {
+    printf("Warning: %d kHz SCLK is higher than 20MHz stated in the datasheet at 3.3V, 25°C.\n", frequency);
+  }
 
   spi.ID = spi_id;
   spi.MOSI = MOSI;
