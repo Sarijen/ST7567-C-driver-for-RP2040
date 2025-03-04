@@ -9,7 +9,7 @@ spiConfig spi = {
   0, // RST pin
 };
 
-uint8_t frameBuffer[NUM_PAGES * LCD_WIDTH]; // contains 1024 Bytes, 128 Bytes per page
+uint8_t frameBuffer[NUM_PAGES * LCD_WIDTH]; // Contains 1024 Bytes, 128 Bytes per page
 
 // Commands defined in binary for clear understanding
 const uint8_t setPageAddr =   0b10110000;
@@ -25,8 +25,8 @@ const uint8_t selectBias =    0b10100011;
 const uint8_t segDirection =  0b10100000; // | 0x01 for inverse
 const uint8_t comDirection =  0b11000000; // | 0x08 for inverse
 const uint8_t EVmode =        0b10000001;
-const uint8_t EVset =         0b00000000;
-const uint8_t REGratio =      0b00100010;
+const uint8_t EVset =         0b00000000; // Contrast control 
+const uint8_t RegRatio =      0b00100010;
 const uint8_t powerControl =  0b00101111;
 const uint8_t setStartLine =  0b01000000; 
 
@@ -144,20 +144,6 @@ void lcd_clear_screen() { // Fills the screen with 0s
   }
 }
 
-inline void send_command(uint8_t command) {
-  gpio_put(spi.CS, 0);
-  spi_write_blocking(spi.ID, &command, 1);
-  gpio_put(spi.CS, 1);
-}
-
-inline void send_data(uint8_t data) {
-  gpio_put(spi.DC, 1);
-  gpio_put(spi.CS, 0);
-  spi_write_blocking(spi.ID, &data, 1);
-  gpio_put(spi.CS, 1);
-  gpio_put(spi.DC, 0);
-}
-
 pwmConfig pwm = {
   -1, // slice num (-1 if doesn't exist)
   0,  // wrapping point
@@ -180,7 +166,7 @@ void lcd_set_brightness(int duty_cycle) {
     return;
   }
 
-  // Duty cycle / 100 converts % to decimal, so we can multiply it with wrapspi. point
+  // Duty cycle / 100 converts % to decimal, so we can multiply it with wrapping point
   // We multiply duty cycle first and then convert, thus avoiding floating-point operations
   int time_ON = (duty_cycle * pwm.wrapping_point) / 100;
 
@@ -192,11 +178,34 @@ void lcd_set_brightness(int duty_cycle) {
   pwm_set_enabled(pwm.slice_num, true);
 }
 
+void lcd_set_contrast(uint8_t value) {
+  if (value > 63) {
+    printf("Error: Value %d is outside the allowed range for contrast");
+    return;
+  }
+  send_command(EVmode);
+  send_command(EVset | value);
+}
+
+inline void send_command(uint8_t command) {
+  gpio_put(spi.CS, 0);
+  spi_write_blocking(spi.ID, &command, 1);
+  gpio_put(spi.CS, 1);
+}
+
+inline void send_data(uint8_t data) {
+  gpio_put(spi.DC, 1);
+  gpio_put(spi.CS, 0);
+  spi_write_blocking(spi.ID, &data, 1);
+  gpio_put(spi.CS, 1);
+  gpio_put(spi.DC, 0);
+}
+
 void lcd_reset() {
   gpio_put(spi.RST, 0);
-  sleep_us(3);
+  sleep_us(2);
   gpio_put(spi.RST, 1);
-  sleep_us(3);
+  sleep_us(2);
 }
 
 void lcd_init() {
@@ -209,16 +218,14 @@ void lcd_init() {
   send_command(powerControl);
   sleep_us(50);
 
-  send_command(REGratio); // You might need to change Regulation Ratio for your specific display
+  send_command(RegRatio);
   send_command(EVmode);
-  send_command(EVset);
+  send_command(EVset); // 0x1F recommended for optimal contrast
 
   send_command(setStartLine);
   send_command(displayON);
   send_command(allPixelON);
 }
-
-
 
 void lcd_spi_init(
     spi_inst_t* spi_id, 

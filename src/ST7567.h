@@ -40,6 +40,7 @@ void lcd_spi_init(
 
 void lcd_init();
 void lcd_reset();
+void lcd_set_contrast(uint8_t value);
 void lcd_enable_pwm_brigthness(uint8_t pin, int frequency); // frequency in kHz
 void lcd_set_brightness(int duty_cycle); // in %
 void lcd_clear_screen();
