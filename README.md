@@ -1,9 +1,9 @@
 # ST7567 driver for RPi Pico (RP2040)
 This driver allows you to control an LCD using SPI with the RP2040 MCU.
-It includes functions for initializing the display, drawing graphics using a framebuffer, controlable backlight and more.
+It includes functions for initializing the display, drawing graphics and pixels using a framebuffer, dimming the backlight and more.
 
 # Features
-- Clearable and easily writable Framebuffer 
+- Clearable and easily writable framebuffer 
 - Drawing shape functions for lines, rectangles, circles and individual pixels
 - Drawing various fonts
 - Displaying bitmap images
@@ -61,4 +61,4 @@ For PWM dimming use a transistor/MOSFET, connecting base to `any GPIO`, Collecto
     #include "ST7567.h"
     ```
 
-4. Properly use the library, check examples/ to see how
+4. Properly use the library, check `examples` folder to see how
