@@ -32,12 +32,12 @@ const uint8_t setStartLine =  0b01000000;
 
 const uint8_t blankData =     0b00000000;
 
-void lcd_draw_image(uint8_t* image, int x, int y, int width, int height) {
-  int currentByte = 0;
-  for (int i = x; i < x + width; i++) { // Individual columns
-    int currentY = y;
-    for (int j = 0; j < (height / 8); j++) {  // Individual bytes in 1 col
-      for (int bit = 7; bit >= 0; bit--) {  // Individual bits in 1 byte
+void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height) {
+  uint16_t currentByte = 0;
+  for (int8_t i = x; i < x + width; i++) { // Individual columns
+    uint16_t currentY = y;
+    for (int8_t j = 0; j < (height / 8); j++) {  // Individual bytes in 1 col
+      for (int8_t bit = 7; bit >= 0; bit--) {  // Individual bits in 1 byte
         // If the bit is NOT 1, draw pixel (inverted)
         if (!((image[currentByte] >> bit) & 1)) {
           lcd_draw_pixel(i, currentY); 
@@ -49,23 +49,23 @@ void lcd_draw_image(uint8_t* image, int x, int y, int width, int height) {
   }
 }
 
-void lcd_fill_rect(int x, int y, int width, int height) {
-  int dx = x + width;
-  int dy = y + height;
+void lcd_fill_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height) {
+  uint8_t dx = x + width;
+  uint8_t dy = y + height;
 
-  for (int i = x; i < dx; i++) { // We supplement x, y with i, j so they reset after loospi.
-    for (int j = y; j < dy; j++) {
+  for (uint8_t i = x; i < dx; i++) { // We supplement x, y with i, j so they reset after looping
+    for (uint8_t j = y; j < dy; j++) {
       lcd_draw_pixel(i, j);
     }            //  x  y
   }
 }
 
-void lcd_draw_rect(int x, int y, int width, int height) {
-  int dx = x + width; 
-  int dy = y + height;
+void lcd_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height) {
+  uint8_t dx = x + width; 
+  uint8_t dy = y + height;
 
-  for (int i = x; i < dx; i++) {
-    for (int j = y; j < dy; j++) {
+  for (uint8_t i = x; i < dx; i++) {
+    for (uint8_t j = y; j < dy; j++) {
       if (i == x || i == dx - 1 || j == y || j == dy - 1) { // Only draw pixels on outer layers
         lcd_draw_pixel(i, j); 
       }
@@ -73,17 +73,17 @@ void lcd_draw_rect(int x, int y, int width, int height) {
   }
 }
 
-void lcd_draw_line(int x1, int y1, int x2, int y2) { // Bresenham's algorithm used
-  int dx = abs(x2 - x1); 
-  int dy = abs(y2 - y1);
-  int sx = (x1 < x2) ? 1 : -1;
-  int sy = (y1 < y2) ? 1 : -1;
-  int error = dx - dy;
+void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2) { // Bresenham's algorithm used
+  uint8_t dx = abs(x2 - x1); 
+  uint8_t dy = abs(y2 - y1);
+  int8_t sx = (x1 < x2) ? 1 : -1;
+  int8_t sy = (y1 < y2) ? 1 : -1;
+  int16_t error = dx - dy;
 
   while (x1 != x2 || y1 != y2) {
     lcd_draw_pixel(x1, y1);
 
-    int e2 = 2*error;
+    int16_t e2 = 2*error;
     if (e2 > -dy) {
       error -= dy;
       x1 += sx;
@@ -95,13 +95,12 @@ void lcd_draw_line(int x1, int y1, int x2, int y2) { // Bresenham's algorithm us
   }
 }
 
-
-void lcd_draw_pixel(int x, int y) { // Calculates x, y to bits location in the buffer
-  int page = y / 8;
-  int byte_index = (128 * page + x);
-  int bit_offset = (y % 8);
+void lcd_draw_pixel(uint8_t x, uint8_t y) { // Calculates x, y to bits location in the buffer
+  uint8_t page = y / 8;
+  uint16_t byte_index = (128 * page + x);
+  uint8_t bit_offset = (y % 8);
   frameBuffer[byte_index] |= (1 << bit_offset);
-  //  lcd_display(); // Sends the entire buffer after every pixel draw, VERY SLOW!
+  //lcd_display(); // Sends the entire buffer after every pixel draw, VERY SLOW!
 }
 
 void lcd_toggle_invert() {
@@ -115,42 +114,42 @@ void lcd_toggle_invert() {
 }
 
 void lcd_display() {
-  for (int currentPage = 0; currentPage < 8; currentPage++) { // Set the right Page and Col addresses
+  for (uint8_t currentPage = 0; currentPage < 8; currentPage++) { // Set the right Page and Col addresses
     send_command(setPageAddr | currentPage);
     send_command(setColAddrH); // Resets the Column Address for every page
     send_command(setColAddrL);
 
-    for (int j = currentPage*128; j < (currentPage*128) + 128; j++) { // Every page is 128 bytes long 
+    for (uint16_t j = currentPage*128; j < (currentPage*128) + 128; j++) { // Every page is 128 bytes long 
       send_data(frameBuffer[j]); // Sending bytes of buffer to the display
     }
   }
 }
 
 void lcd_clear_buffer() { // Fills the buffer on MCU with 0s
-  for (int byte = 0; byte < 1024; byte++) {
+  for (uint16_t byte = 0; byte < 1024; byte++) {
     frameBuffer[byte] = blankData;
   }
 }
 
 void lcd_clear_screen() { // Fills the screen with 0s
-  for (int currentPage = 0; currentPage < 8; currentPage++) {
+  for (uint8_t currentPage = 0; currentPage < 8; currentPage++) {
     send_command(setPageAddr | currentPage);
     send_command(setColAddrH); 
     send_command(setColAddrL); 
 
-    for (int j = 0; j < 128; j++) { 
+    for (uint8_t j = 0; j < 128; j++) { 
       send_data(blankData);
     }
   }
 }
 
 pwmConfig pwm = {
-  -1, // slice num (-1 if doesn't exist)
+  69, // slice num (-1 if doesn't exist)
   0,  // wrapping point
   15  // pin number
 };
 
-void lcd_enable_pwm_brigthness(uint8_t pin, int frequency) {
+void lcd_enable_pwm_brightness(uint8_t pin, uint8_t frequency) {
   pwm.pin = pin;
   pwm.wrapping_point = 1000000 / (frequency * 8);  
   
@@ -159,13 +158,14 @@ void lcd_enable_pwm_brigthness(uint8_t pin, int frequency) {
   pwm_set_wrap(pwm.slice_num, pwm.wrapping_point);
 }
 
-void lcd_set_brightness(int duty_cycle) {
-  if (pwm.slice_num == -1) {
+void lcd_set_brightness(uint8_t duty_cycle) {
+  if (pwm.slice_num == 69) {
     printf("Error: You need to call lcd_enable_pwm_brigthness() first!\n");
     return;
   }
-  if (duty_cycle < 0 || duty_cycle > 100) {
-    printf("Error: Brightness must be between 1 and 100 inclusive!\n");
+  if (duty_cycle > 100) {
+    duty_cycle = 100;
+    printf("Warning: Brightness cannot exceed 100%, defaulted back to 100%.\n");
     return;
   }
   if (duty_cycle == 0) {
@@ -175,7 +175,7 @@ void lcd_set_brightness(int duty_cycle) {
 
   // Duty cycle / 100 converts % to decimal, so we can multiply it with wrapping point
   // We multiply duty cycle first and then convert, thus avoiding floating-point operations
-  int time_ON = (duty_cycle * pwm.wrapping_point) / 100;
+  uint16_t time_ON = (duty_cycle * pwm.wrapping_point) / 100;
 
   if ((pwm.pin % 2) == 0) { // Even pins are channel A, B are odd
     pwm_set_chan_level(pwm.slice_num, PWM_CHAN_A, time_ON);
