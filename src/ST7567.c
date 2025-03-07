@@ -40,7 +40,7 @@ void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t
       for (int8_t bit = 7; bit >= 0; bit--) {  // Individual bits in 1 byte
         // If the bit is NOT 1, draw pixel (inverted)
         if (!((image[currentByte] >> bit) & 1)) {
-          lcd_draw_pixel(i, currentY); 
+          lcd_draw_pixel(i, currentY, 1); 
         }
         currentY++;
       }
@@ -49,31 +49,31 @@ void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t
   }
 }
 
-void lcd_fill_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height) {
+void lcd_fill_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t value) {
   uint8_t dx = x + width;
   uint8_t dy = y + height;
 
   for (uint8_t i = x; i < dx; i++) { // We supplement x, y with i, j so they reset after looping
     for (uint8_t j = y; j < dy; j++) {
-      lcd_draw_pixel(i, j);
+      lcd_draw_pixel(i, j, 1);
     }            //  x  y
   }
 }
 
-void lcd_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height) {
+void lcd_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t value) {
   uint8_t dx = x + width; 
   uint8_t dy = y + height;
 
   for (uint8_t i = x; i < dx; i++) {
     for (uint8_t j = y; j < dy; j++) {
       if (i == x || i == dx - 1 || j == y || j == dy - 1) { // Only draw pixels on outer layers
-        lcd_draw_pixel(i, j); 
+        lcd_draw_pixel(i, j, 1); 
       }
     }
   }
 }
 
-void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2) { // Bresenham's algorithm used
+void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value) { // Bresenham's algorithm used
   uint8_t dx = abs(x2 - x1); 
   uint8_t dy = abs(y2 - y1);
   int8_t sx = (x1 < x2) ? 1 : -1;
@@ -81,7 +81,7 @@ void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2) { // Bresenha
   int16_t error = dx - dy;
 
   while (x1 != x2 || y1 != y2) {
-    lcd_draw_pixel(x1, y1);
+    lcd_draw_pixel(x1, y1, 1);
 
     int16_t e2 = 2*error;
     if (e2 > -dy) {
@@ -95,11 +95,17 @@ void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2) { // Bresenha
   }
 }
 
-void lcd_draw_pixel(uint8_t x, uint8_t y) { // Calculates x, y to bits location in the buffer
+void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value) { // Calculates x, y to bits location in the buffer
   uint8_t page = y / 8;
   uint16_t byte_index = (128 * page + x);
   uint8_t bit_offset = (y % 8);
-  frameBuffer[byte_index] |= (1 << bit_offset);
+  if (value == 0) {
+    uint8_t left_offset = (1 << bit_offset - 1) - 1;
+    uint8_t mask = (left_offset << bit_offset + 1) | (1 << bit_offset) - 1;
+    frameBuffer[byte_index] &= mask;  
+  } else {
+    frameBuffer[byte_index] |= (1 << bit_offset);
+  }
   //lcd_display(); // Sends the entire buffer after every pixel draw, VERY SLOW!
 }
 
