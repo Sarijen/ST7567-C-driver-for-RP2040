@@ -26,7 +26,7 @@ const uint8_t segDirection =  0b10100000; // | 0x01 for inverse
 const uint8_t comDirection =  0b11000000; // | 0x08 for inverse
 const uint8_t EVmode =        0b10000001;
 const uint8_t EVset =         0b00000000; // Contrast control 
-const uint8_t RegRatio =      0b00100010;
+const uint8_t RegRatio =      0b00100000;
 const uint8_t powerControl =  0b00101111;
 const uint8_t setStartLine =  0b01000000; 
 
@@ -55,7 +55,7 @@ void lcd_fill_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t 
 
   for (uint8_t i = x; i < dx; i++) { // We supplement x, y with i, j so they reset after looping
     for (uint8_t j = y; j < dy; j++) {
-      lcd_draw_pixel(i, j, 1);
+      lcd_draw_pixel(i, j, value);
     }            //  x  y
   }
 }
@@ -67,7 +67,7 @@ void lcd_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t 
   for (uint8_t i = x; i < dx; i++) {
     for (uint8_t j = y; j < dy; j++) {
       if (i == x || i == dx - 1 || j == y || j == dy - 1) { // Only draw pixels on outer layers
-        lcd_draw_pixel(i, j, 1); 
+        lcd_draw_pixel(i, j, value); 
       }
     }
   }
@@ -81,7 +81,7 @@ void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value
   int16_t error = dx - dy;
 
   while (x1 != x2 || y1 != y2) {
-    lcd_draw_pixel(x1, y1, 1);
+    lcd_draw_pixel(x1, y1, value);
 
     int16_t e2 = 2*error;
     if (e2 > -dy) {
@@ -98,13 +98,11 @@ void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value
 void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value) { // Calculates x, y to bits location in the buffer
   uint8_t page = y / 8;
   uint16_t byte_index = (128 * page + x);
-  uint8_t bit_offset = (y % 8);
+  uint8_t bit_position = (y % 8);
   if (value == 0) {
-    uint8_t left_offset = (1 << bit_offset - 1) - 1;
-    uint8_t mask = (left_offset << bit_offset + 1) | (1 << bit_offset) - 1;
-    frameBuffer[byte_index] &= mask;  
+    frameBuffer[byte_index] &= ~(1 << bit_position);  
   } else {
-    frameBuffer[byte_index] |= (1 << bit_offset);
+    frameBuffer[byte_index] |= (1 << bit_position);
   }
   //lcd_display(); // Sends the entire buffer after every pixel draw, VERY SLOW!
 }
@@ -231,7 +229,7 @@ void lcd_init() {
   send_command(powerControl);
   sleep_us(50);
 
-  send_command(RegRatio);
+  send_command(RegRatio | 0b100);
   send_command(EVmode);
   send_command(EVset); // 0x1F recommended for optimal contrast
 
