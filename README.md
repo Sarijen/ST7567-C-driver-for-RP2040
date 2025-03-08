@@ -54,7 +54,7 @@ For PWM dimming use a transistor/MOSFET, connecting base to `any GPIO`, Collecto
     ``` 
     add_subdirectory(ST7567-C-driver-for-RP2040)
     ```
-    add `ST7567_driver` to target_link_libraries
+    add `ST7567` to target_link_libraries
 
 3. include header in your .c file
     ```
