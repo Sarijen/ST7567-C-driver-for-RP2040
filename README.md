@@ -10,9 +10,10 @@ It includes functions for initializing the display, drawing graphics and pixels 
 - PWM dimmable backlight
 
 # Wiring Diagram
-- Wiring doesn't have to be exactly the same as shown below, just make sure you use the correct SPI pins to your selected instance (`SPI0` or `SPI1`)
-- Only if your pins are wired up and you specify these values in the code, including the SPI instance `correctly`, the driver can work.
-- `CS` can be connected to any GPIO pin you want, assuming you specify it correctly in your code
+- Wiring doesn't have to be exactly the same as shown below, just make sure you use the `correct` SPI pins to your selected instance (`SPI0` or `SPI1`)
+- Only if your pins are wired up and you specify these pins with the SPI instance in the code `correctly`, the driver can work.
+- `CS` pin can be connected to any GPIO pin you want, assuming you specify it correctly in your code
+
 
 <img src="images/wiringDiagram.png" width="500"/>
 
