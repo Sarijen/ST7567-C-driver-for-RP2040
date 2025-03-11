@@ -12,25 +12,32 @@ spiConfig spi = {
 uint8_t frameBuffer[NUM_PAGES * LCD_WIDTH]; // Contains 1024 Bytes, 128 Bytes per page
 
 // Commands defined in binary for clear understanding
-const uint8_t setPageAddr =   0b10110000;
-const uint8_t setColAddrH =   0b00010000;
-const uint8_t setColAddrL =   0b00000000; 
-const uint8_t invertDisplay = 0b10100111;
-int displayInverted = 0;
-const uint8_t NOP =           0b11100011;
-const uint8_t displayON =     0b10101111;
-const uint8_t displayOFF =    0b10101110;
-const uint8_t allPixelON =    0b10100100;
-const uint8_t selectBias =    0b10100011; 
-const uint8_t segDirection =  0b10100000; // | 0x01 for inverse
-const uint8_t comDirection =  0b11000000; // | 0x08 for inverse
-const uint8_t EVmode =        0b10000001;
-const uint8_t EVset =         0b00000000; // Contrast control 
-const uint8_t RegRatio =      0b00100000;
-const uint8_t powerControl =  0b00101111;
-const uint8_t setStartLine =  0b01000000; 
+// # CONFIGURATION #
+static const uint8_t EVmode =           0b10000001;
+static const uint8_t EVset =            0b00000000;
+static const uint8_t regRatio =         0b00100000;
+static const uint8_t powerControl =     0b00101111;
+static const uint8_t setStartLine =     0b01000000;
+static const uint8_t selectBias =       0b10100011;
 
-const uint8_t blankData =     0b00000000;
+// # PIXEL DATA MANIPULATION
+static const uint8_t allPixelsNormal =  0b10100100;
+static const uint8_t allPixelsON =      allPixelsNormal | 0x01;
+static const uint8_t setPageAddr =      0b10110000;
+static const uint8_t setColAddrH =      0b00010000;
+static const uint8_t setColAddrL =      0b00000000;
+static const uint8_t segDirection =     0b10100000; // | 0x01 for inverse
+static const uint8_t comDirection =     0b11000000; // | 0x08 for inverse
+static const uint8_t invertDisplay =    0b10100111;
+static uint8_t displayInverted = 0;
+
+// OTHER
+static const uint8_t NOP =              0b11100011;
+static const uint8_t reset =            0b11100010;
+static const uint8_t displayON =        0b10101111;
+static const uint8_t displayOFF =       0b10101110;
+
+const uint8_t blankData = 0x00;
 
 void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height) {
   uint16_t currentByte = 0;
@@ -105,6 +112,14 @@ void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value) { // Calculates x, y to
     frameBuffer[byte_index] |= (1 << bit_position);
   }
   //lcd_display(); // Sends the entire buffer after every pixel draw, VERY SLOW!
+}
+
+void lcd_shift_horizontaly(uint8_t shift_amount) {
+  if (shift_amount > 63) {
+    printf("Warning: You cannot shift horizontaly more than 63 pixels.\n");
+    shift_amount = 63;
+  }
+  send_command(setStartLine | shift_amount);
 }
 
 void lcd_toggle_invert() {
@@ -229,13 +244,13 @@ void lcd_init() {
   send_command(powerControl);
   sleep_us(50);
 
-  send_command(RegRatio | 0b100);
+  send_command(regRatio | 0b100);
   send_command(EVmode);
   send_command(EVset); // 0x1F recommended for optimal contrast
 
   send_command(setStartLine);
   send_command(displayON);
-  send_command(allPixelON);
+  send_command(allPixelsNormal);
 }
 
 void lcd_spi_init(
