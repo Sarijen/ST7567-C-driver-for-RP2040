@@ -23,11 +23,16 @@ static const uint8_t selectBias =       0b10100011;
 // # PIXEL DATA MANIPULATION
 static const uint8_t allPixelsNormal =  0b10100100;
 static const uint8_t allPixelsON =      allPixelsNormal | 0x01;
+
 static const uint8_t setPageAddr =      0b10110000;
 static const uint8_t setColAddrH =      0b00010000;
 static const uint8_t setColAddrL =      0b00000000;
-static const uint8_t segDirection =     0b10100000; // | 0x01 for inverse
-static const uint8_t comDirection =     0b11000000; // | 0x08 for inverse
+
+static const uint8_t segDirection =     0b10100000;
+static const uint8_t segInvDirection =  segDirection | 0x01;
+static const uint8_t comDirection =     0b11000000; 
+static const uint8_t comInvDirection =  comDirection | 0x08; 
+
 static const uint8_t invertDisplay =    0b10100111;
 static uint8_t displayInverted = 0;
 
@@ -112,6 +117,16 @@ void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value) { // Calculates x, y to
     frameBuffer[byte_index] |= (1 << bit_position);
   }
   //lcd_display(); // Sends the entire buffer after every pixel draw, VERY SLOW!
+}
+
+void lcd_flip(uint8_t horizontaly, uint8_t verticaly) {
+  if (horizontaly > 1 || verticaly > 1) {
+    printf("Error: Flipping values can only be 0 or 1"); 
+    return;
+  }
+  send_command((horizontaly) ? comInvDirection : comDirection);
+  send_command((verticaly) ? segInvDirection : segDirection);
+  lcd_display();
 }
 
 void lcd_shift_horizontaly(uint8_t shift_amount) {
@@ -240,7 +255,7 @@ void lcd_init() {
   send_command(displayOFF);
   send_command(selectBias);
   send_command(segDirection);
-  send_command(comDirection | 0x08);
+  send_command(comInvDirection);
   send_command(powerControl);
   sleep_us(50);
 

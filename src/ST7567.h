@@ -48,6 +48,7 @@ void lcd_clear_buffer();
 void lcd_display();
 void lcd_toggle_invert();
 void lcd_shift_horizontaly(uint8_t shift_amount);
+void lcd_flip(uint8_t horizontaly, uint8_t verticaly);
 void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value);
 void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value);
 void lcd_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t value);
