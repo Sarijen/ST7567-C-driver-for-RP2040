@@ -121,7 +121,7 @@ void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value) { // Calculates x, y to
 
 void lcd_flip(uint8_t horizontaly, uint8_t verticaly) {
   if (horizontaly > 1 || verticaly > 1) {
-    printf("Error: Flipping values can only be 0 or 1"); 
+    printf("Error: Flipping values can only be 0 or 1\n"); 
     return;
   }
   send_command((horizontaly) ? comInvDirection : comDirection);
@@ -221,20 +221,20 @@ void lcd_set_brightness(uint8_t duty_cycle) {
 
 void lcd_set_contrast(uint8_t value) {
   if (value > 63) {
-    printf("Error: Value %d is outside the allowed range for contrast", value);
+    printf("Error: Value %d is outside the allowed range for contrast\n", value);
     return;
   }
   send_command(EVmode);
   send_command(EVset | value);
 }
 
-inline void send_command(uint8_t command) {
+static inline void send_command(uint8_t command) {
   gpio_put(spi.CS, 0);
   spi_write_blocking(spi.ID, &command, 1);
   gpio_put(spi.CS, 1);
 }
 
-inline void send_data(uint8_t data) {
+static inline void send_data(uint8_t data) {
   gpio_put(spi.DC, 1);
   gpio_put(spi.CS, 0);
   spi_write_blocking(spi.ID, &data, 1);

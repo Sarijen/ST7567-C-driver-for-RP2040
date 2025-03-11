@@ -27,8 +27,8 @@ typedef struct {
   uint8_t pin;
 } pwmConfig;
 
-void send_command(uint8_t command);
-void send_data(uint8_t data);
+static inline void send_command(uint8_t command);
+static inline void send_data(uint8_t data);
 void lcd_spi_init(
     spi_inst_t* spi_id,
     uint8_t MOSI,
