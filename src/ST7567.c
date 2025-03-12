@@ -13,14 +13,18 @@ uint8_t frameBuffer[NUM_PAGES * LCD_WIDTH]; // Contains 1024 Bytes, 128 Bytes pe
 
 // Commands defined in binary for clear understanding
 // # CONFIGURATION #
+// EV, Regulation Ratio and Bias are used for contrast
 static const uint8_t EVmode =           0b10000001;
 static const uint8_t EVset =            0b00000000;
 static const uint8_t regRatio =         0b00100000;
-static const uint8_t powerControl =     0b00101111;
-static const uint8_t setStartLine =     0b01000000;
 static const uint8_t selectBias =       0b10100011;
+static const uint8_t powerControl =     0b00101111;
+
+static const uint8_t displayOFF =       0b10101110;
+static const uint8_t displayON =        displayOFF | 0x01;
 
 // # PIXEL DATA MANIPULATION
+static const uint8_t setStartLine =     0b01000000;
 static const uint8_t allPixelsNormal =  0b10100100;
 static const uint8_t allPixelsON =      allPixelsNormal | 0x01;
 
@@ -39,8 +43,6 @@ static uint8_t displayInverted = 0;
 // OTHER
 static const uint8_t NOP =              0b11100011;
 static const uint8_t reset =            0b11100010;
-static const uint8_t displayON =        0b10101111;
-static const uint8_t displayOFF =       0b10101110;
 
 const uint8_t blankData = 0x00;
 
@@ -178,7 +180,7 @@ void lcd_clear_screen() { // Fills the screen with 0s
 }
 
 pwmConfig pwm = {
-  69, // slice num (-1 if doesn't exist)
+  69, // slice num (69 if doesn't exist)
   0,  // wrapping point
   15  // pin number
 };
@@ -246,7 +248,7 @@ void lcd_reset() {
   gpio_put(spi.RST, 0);
   sleep_us(2);
   gpio_put(spi.RST, 1);
-  sleep_us(2);
+  sleep_us(1);
 }
 
 void lcd_init() {
