@@ -12,7 +12,14 @@ add_library(ST7567 STATIC
   src/ST7567.c
 )
 target_include_directories(ST7567 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(ST7567 pico_stdlib hardware_spi hardware_gpio hardware_pwm)
+target_link_libraries(
+  ST7567
+  pico_stdlib
+  hardware_spi
+  hardware_gpio
+  hardware_pwm
+  hardware_clocks
+)
 
 add_executable(ST7567_example
   src/ST7567.c
@@ -24,9 +31,15 @@ add_executable(ST7567_example
 # examples/images.c
 )
 
-target_link_libraries(ST7567_example pico_stdlib hardware_spi hardware_gpio hardware_pwm)
+target_link_libraries(
+  ST7567_example
+  pico_stdlib
+  hardware_spi
+  hardware_gpio
+  hardware_pwm
+)
 
 # Enable for USB debugging
-#pico_enable_stdio_usb(ST7567_example 1)
+# pico_enable_stdio_usb(ST7567_example 1)
 
 pico_add_extra_outputs(ST7567_example)
