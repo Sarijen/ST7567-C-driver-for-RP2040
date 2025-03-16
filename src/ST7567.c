@@ -223,9 +223,10 @@ void lcd_set_brightness(uint8_t duty_cycle) {
 
 void lcd_set_contrast(uint8_t value) {
   if (value > 63) {
-    printf("Error: Value %d is outside the allowed range for contrast\n", value);
-    return;
+    printf("Warning: Contrast value %d shouln't exceed 63\n", value);
+    value = 63;
   }
+  send_command(regRatio | (value / 8));
   send_command(EVmode);
   send_command(EVset | value);
 }
@@ -261,9 +262,9 @@ void lcd_init() {
   send_command(powerControl);
   sleep_us(50);
 
-  send_command(regRatio | 0b100);
+  send_command(regRatio); // | 0x04 recommended for optimal contrast
   send_command(EVmode);
-  send_command(EVset); // 0x1F recommended for optimal contrast
+  send_command(EVset); // | 0x1F recommended for optimal contrast
 
   send_command(setStartLine);
   send_command(displayON);
