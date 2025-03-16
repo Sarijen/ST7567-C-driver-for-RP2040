@@ -221,14 +221,13 @@ void lcd_set_brightness(uint8_t duty_cycle) {
   pwm_set_enabled(pwm.slice_num, true);
 }
 
-void lcd_set_contrast(uint8_t value) {
-  if (value > 63) {
-    printf("Warning: Contrast value %d shouln't exceed 63\n", value);
-    value = 63;
-  }
-  send_command(regRatio | (value / 8));
+void lcd_set_contrast(uint8_t RR_value, uint8_t EV_value) {
+  if (EV_value > 63) {EV_value = 63;}
+  if (RR_value > 7) {RR_value = 7;}
+
+  send_command(regRatio | RR_value); // 0x04 recommended
   send_command(EVmode);
-  send_command(EVset | value);
+  send_command(EVset | EV_value); // 0x1F recommended
 }
 
 static inline void send_command(uint8_t command) {
@@ -262,9 +261,9 @@ void lcd_init() {
   send_command(powerControl);
   sleep_us(50);
 
-  send_command(regRatio); // | 0x04 recommended for optimal contrast
+  send_command(regRatio); 
   send_command(EVmode);
-  send_command(EVset); // | 0x1F recommended for optimal contrast
+  send_command(EVset);
 
   send_command(setStartLine);
   send_command(displayON);
