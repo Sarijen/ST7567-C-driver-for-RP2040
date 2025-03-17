@@ -185,9 +185,11 @@ pwmConfig pwm = {
   15  // pin number
 };
 
-void lcd_enable_pwm_brightness(uint8_t pin, uint8_t frequency) {
+void lcd_enable_pwm_brightness(uint8_t pin, uint8_t pwm_frequency) {
   pwm.pin = pin;
-  pwm.wrapping_point = 1000000 / (frequency * 8);  
+
+  uint16_t sys_frequency = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_SYS) / 1000;
+  pwm.wrapping_point = (1000000 / pwm_frequency) / (1000 / sys_frequency);
   
   gpio_set_function(pwm.pin, GPIO_FUNC_PWM);
   pwm.slice_num = pwm_gpio_to_slice_num(pwm.pin);
@@ -209,7 +211,7 @@ void lcd_set_brightness(uint8_t duty_cycle) {
     return;
   }
 
-  // Duty cycle / 100 converts % to decimal, so we can multiply it with wrapping point
+  // "Duty cycle / 100" converts % to decimal, so we can multiply it with wrapping point
   // We multiply duty cycle first and then convert, thus avoiding floating-point operations
   uint16_t time_ON = (duty_cycle * pwm.wrapping_point) / 100;
 
@@ -279,8 +281,10 @@ void lcd_spi_init(
     uint8_t RST,
     uint16_t frequency) {
 
-  if (frequency > 20000) {
-    printf("Warning: %d kHz SCLK is higher than 20MHz stated in the datasheet at 3.3V, 25°C.\n", frequency);
+  if (frequency > frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_SYS)) {
+    printf("Error: Specified %d kHz is higher than system frequency!\n", frequency);
+  } else if (frequency > 20000) {
+    printf("Warning: Specified %d kHz SCLK is higher than 20MHz stated in the datasheet at 3.3V, 25°C.\n", frequency);
   }
 
   spi.ID = spi_id;
