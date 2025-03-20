@@ -46,6 +46,30 @@ static const uint8_t reset =            0b11100010;
 
 const uint8_t blankData = 0x00;
 
+void lcd_draw_character(uint8_t x, uint8_t y, char character) {
+  uint8_t* bitmap_data;
+  for (uint8_t i = 0; i < 10; i++) {
+    if (character == font_4x8[i].character) {
+      bitmap_data = font_4x8[i].bitmap_data;
+    }
+  }
+
+  uint8_t currentByte = 0;
+  for (int i = x; i < x + 4; i++) {
+    int currentY = y;
+    for (int j = 0; j < (8 / 8); j++) {
+      for (int bit = 0; bit < 8; bit++) {
+        if ((bitmap_data[currentByte] >> bit) & 1) {
+          lcd_draw_pixel(i, currentY, 1);
+        }
+        currentY++;
+      }
+      currentByte++;
+    }
+  }
+  
+}
+
 void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height) {
   uint16_t currentByte = 0;
   for (int8_t i = x; i < x + width; i++) { // Individual columns

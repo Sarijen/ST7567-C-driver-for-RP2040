@@ -10,6 +10,7 @@ pico_sdk_init()
 
 add_library(ST7567 STATIC
   src/ST7567.c
+  src/fonts.c
 )
 target_include_directories(ST7567 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(
@@ -23,6 +24,7 @@ target_link_libraries(
 
 add_executable(ST7567_example
   src/ST7567.c
+  src/fonts.c
 # examples/animation.c
 # examples/basics.c
  examples/beta_example.c
