@@ -8,8 +8,10 @@
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 #include "hardware/clocks.h"
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define LCD_WIDTH 128
 #define LCD_HEIGHT 64
@@ -59,5 +61,6 @@ void lcd_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t 
 void lcd_fill_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t value);
 void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height);
 void lcd_draw_character(uint8_t x, uint8_t y, char character);
+void lcd_draw_string(uint8_t x, uint8_t y, char string[]);
 
 #endif 

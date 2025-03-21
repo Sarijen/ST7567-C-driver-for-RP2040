@@ -46,18 +46,30 @@ static const uint8_t reset =            0b11100010;
 
 const uint8_t blankData = 0x00;
 
+void lcd_draw_string(uint8_t x, uint8_t y, char string[]) {
+  uint8_t width = 5; // HARDCODED !!!
+
+  for (uint8_t i; i < strlen(string); i++) {
+    lcd_draw_character(x + ((width + 1) * i), y, string[i]);
+  }
+}
+
 void lcd_draw_character(uint8_t x, uint8_t y, char character) {
   uint8_t* bitmap_data;
-  for (uint8_t i = 0; i < 10; i++) {
-    if (character == font_4x8[i].character) {
-      bitmap_data = font_4x8[i].bitmap_data;
+  for (uint8_t i = 0; i < 37; i++) {
+    if (character == font_5x8[i].character) {
+      bitmap_data = font_5x8[i].bitmap_data;
     }
   }
 
+  // HARDCODED !!!
+  uint8_t width = 5;
+  uint8_t height = 8;
+
   uint8_t currentByte = 0;
-  for (int i = x; i < x + 4; i++) {
+  for (int i = x; i < x + width; i++) {
     int currentY = y;
-    for (int j = 0; j < (8 / 8); j++) {
+    for (int j = 0; j < (height / 8); j++) {
       for (int bit = 0; bit < 8; bit++) {
         if ((bitmap_data[currentByte] >> bit) & 1) {
           lcd_draw_pixel(i, currentY, 1);
