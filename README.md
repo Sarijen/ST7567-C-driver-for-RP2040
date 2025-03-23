@@ -4,8 +4,8 @@ It includes functions for initializing the display, drawing graphics and pixels 
 
 # Features
 - Clearable and easily writable framebuffer 
-- Drawing shape functions for lines, rectangles, circles and individual pixels
-- Drawing various fonts
+- Drawing lines, rectangles, circles and individual pixels
+- Drawing built-in or custom fonts
 - Displaying bitmap images
 - PWM dimmable backlight
 
@@ -58,11 +58,11 @@ For PWM dimming use a transistor/MOSFET, connecting base to `any GPIO`, Collecto
     ``` 
     add_subdirectory(ST7567-C-driver-for-RP2040)
     ```
-    add `ST7567` to target_link_libraries
+    add `ST7567` keyword to target_link_libraries
 
 3. include header in your .c file
     ```
     #include "ST7567.h"
     ```
 
-4. Properly use the library, check `examples` folder to see how
+4. Properly use the library, check `examples` folder for API reference and proper usage.
