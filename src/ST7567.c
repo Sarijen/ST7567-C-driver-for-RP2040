@@ -56,7 +56,7 @@ void lcd_draw_string(uint8_t x, uint8_t y, char string[]) {
 
 void lcd_draw_character(uint8_t x, uint8_t y, char character) {
   uint8_t* bitmap_data;
-  for (uint8_t i = 0; i < 37; i++) {
+  for (uint8_t i = 0; i < 86; i++) {
     if (character == font_5x8[i].character) {
       bitmap_data = font_5x8[i].bitmap_data;
     }
