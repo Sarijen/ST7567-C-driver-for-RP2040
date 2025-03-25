@@ -71,7 +71,7 @@ void lcd_draw_character(uint8_t x, uint8_t y, char character) {
     int currentY = y;
     for (int j = 0; j < (height / 8); j++) {
       for (int bit = 0; bit < 8; bit++) {
-        if ((bitmap_data[currentByte] >> bit) & 1) {
+        if (!((bitmap_data[currentByte] >> bit) & 1)) {
           lcd_draw_pixel(i, currentY, 1);
         }
         currentY++;
