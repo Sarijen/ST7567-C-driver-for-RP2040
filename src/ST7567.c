@@ -9,11 +9,14 @@ spiConfig spi = {
   0, // RST pin
 };
 
-uint8_t frameBuffer[NUM_PAGES * LCD_WIDTH]; // Contains 1024 Bytes, 128 Bytes per page
+#define LCD_WIDTH 128
+#define LCD_HEIGHT 64
+#define PAGE_COUNT 8
+
+uint8_t frameBuffer[PAGE_COUNT * LCD_WIDTH]; // Contains 1024 Bytes, 128 Bytes per page
 
 // Commands defined in binary for clear understanding
-// # CONFIGURATION #
-// EV, Regulation Ratio and Bias are used for contrast
+// # CONFIGURATION
 static const uint8_t EVmode =           0b10000001;
 static const uint8_t EVset =            0b00000000;
 static const uint8_t regRatio =         0b00100000;
@@ -283,6 +286,7 @@ void lcd_spi_init(
 
   if (frequency > frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_SYS)) {
     printf("Error: Specified %d kHz is higher than system frequency!\n", frequency);
+    return;
   } else if (frequency > 20000) {
     printf("Warning: Specified %d kHz SCLK is higher than 20MHz stated in the datasheet at 3.3V, 25°C.\n", frequency);
   }
