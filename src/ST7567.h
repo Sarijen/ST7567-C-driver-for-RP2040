@@ -1,13 +1,17 @@
 #ifndef ST7567_H
 #define ST7567_H
 
+#include "fonts.h"
+
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 #include "hardware/clocks.h"
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct {
   spi_inst_t* ID;  // SPI instance (spi0/spi1)
@@ -53,5 +57,7 @@ void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value
 void lcd_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t value);
 void lcd_fill_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t value);
 void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height);
+void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character);
+void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[]);
 
 #endif 
