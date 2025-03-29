@@ -5,10 +5,96 @@
 
 typedef struct {
   char character;
+  const uint8_t width;
+  const uint8_t height;
   uint8_t* bitmap_data;
 } font_table;
 
-extern font_table font_5x8[86];
+#define TABLE_SIZE_10X16 86
+#define TABLE_SIZE_5X8 86
+
+extern font_table font_10x16[TABLE_SIZE_10X16];
+extern font_table font_5x8[TABLE_SIZE_5X8];
+
+
+// ============== 10x16 ============
+// extern uint8_t space_10x16[5];
+
+// NUMBERS
+extern uint8_t zero_10x16[20];
+extern uint8_t one_10x16[20];
+extern uint8_t two_10x16[20];
+extern uint8_t three_10x16[20];
+extern uint8_t four_10x16[20];
+extern uint8_t five_10x16[20];
+extern uint8_t six_10x16[20];
+extern uint8_t seven_10x16[20];
+extern uint8_t eight_10x16[20];
+extern uint8_t nine_10x16[20];
+
+// UPPERCASE LETTERS
+
+extern uint8_t A_10x16[20];
+extern uint8_t B_10x16[20];
+extern uint8_t C_10x16[20];
+extern uint8_t D_10x16[20];
+extern uint8_t E_10x16[20];
+extern uint8_t D_10x16[20];
+extern uint8_t F_10x16[20];
+extern uint8_t G_10x16[20];
+extern uint8_t H_10x16[20];
+extern uint8_t I_10x16[20];
+extern uint8_t J_10x16[20];
+extern uint8_t K_10x16[20];
+extern uint8_t L_10x16[20];
+extern uint8_t M_10x16[20];
+extern uint8_t N_10x16[20];
+extern uint8_t O_10x16[20];
+extern uint8_t P_10x16[20];
+extern uint8_t Q_10x16[20];
+extern uint8_t R_10x16[20];
+extern uint8_t S_10x16[20];
+extern uint8_t T_10x16[20];
+extern uint8_t U_10x16[20];
+extern uint8_t V_10x16[20];
+extern uint8_t W_10x16[20];
+extern uint8_t X_10x16[20];
+extern uint8_t Y_10x16[20];
+extern uint8_t Z_10x16[20];
+
+// LOWERCASE LETTERS
+extern uint8_t a_10x16[20];
+extern uint8_t b_10x16[20];
+extern uint8_t c_10x16[20];
+extern uint8_t d_10x16[20];
+extern uint8_t e_10x16[20];
+extern uint8_t d_10x16[20];
+extern uint8_t f_10x16[20];
+extern uint8_t g_10x16[20];
+extern uint8_t h_10x16[20];
+extern uint8_t i_10x16[20];
+extern uint8_t j_10x16[20];
+extern uint8_t k_10x16[20];
+extern uint8_t l_10x16[20];
+extern uint8_t m_10x16[20];
+extern uint8_t n_10x16[20];
+extern uint8_t o_10x16[20];
+extern uint8_t p_10x16[20];
+extern uint8_t q_10x16[20];
+extern uint8_t r_10x16[20];
+extern uint8_t s_10x16[20];
+extern uint8_t t_10x16[20];
+extern uint8_t u_10x16[20];
+extern uint8_t v_10x16[20];
+extern uint8_t w_10x16[20];
+extern uint8_t x_10x16[20];
+extern uint8_t y_10x16[20];
+extern uint8_t z_10x16[20];
+
+// SPECIAL
+
+
+// ============== 5x8 ==============
 
 extern uint8_t space_5x8[5];
 
