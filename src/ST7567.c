@@ -64,7 +64,6 @@ void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character) 
 
   uint8_t currentByte = 0;
   for (int i = x; i < x + font[matching_char].width; i++) {
-    printf("%d\n", x + font[matching_char].width);
     int currentY = y;
     for (int j = 0; j < (font[matching_char].height / 8); j++) {
       for (int bit = 0; bit < 8; bit++) {
