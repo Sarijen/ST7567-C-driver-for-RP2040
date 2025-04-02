@@ -66,4 +66,3 @@ For PWM dimming use a transistor/MOSFET, connecting base to `any GPIO`, Collecto
     ```
 
 4. Properly use the library, check `examples` folder for API reference and proper usage.
-test
