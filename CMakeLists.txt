@@ -26,9 +26,10 @@ add_executable(ST7567_example
   src/ST7567.c
   src/fonts.c
 # examples/animation.c
-# examples/basics.c
- examples/beta_example.c
+ examples/basics.c
+# examples/beta_example.c
 # examples/fonts.c
+# examples/digital_clock.c
 # examples/shapes.c
 # examples/images.c
 )
@@ -39,6 +40,7 @@ target_link_libraries(
   hardware_spi
   hardware_gpio
   hardware_pwm
+  hardware_rtc
 )
 
 # Enable for USB debugging
