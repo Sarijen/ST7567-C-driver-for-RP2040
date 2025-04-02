@@ -239,7 +239,6 @@ void lcd_set_brightness(uint8_t duty_cycle) {
   if (duty_cycle > 100) {
     duty_cycle = 100;
     printf("Warning: Brightness cannot exceed 100%, defaulted back to 100%.\n");
-    return;
   }
   if (duty_cycle == 0) {
     pwm_set_enabled(pwm.slice_num, false);
@@ -247,7 +246,7 @@ void lcd_set_brightness(uint8_t duty_cycle) {
   }
 
   // "Duty cycle / 100" converts % to decimal, so we can multiply it with wrapping point
-  // We multiply duty cycle first and then convert, thus avoiding floating-point operations
+  // BUT here we multiply duty cycle first and then convert, thus avoiding floating-point operations
   uint16_t time_ON = (duty_cycle * pwm.wrapping_point) / 100;
 
   if ((pwm.pin % 2) == 0) { // Even pins are channel A, B are odd
