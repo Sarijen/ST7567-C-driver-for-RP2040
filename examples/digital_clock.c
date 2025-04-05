@@ -1,3 +1,6 @@
+// Shows driver being used in more "real world" scenario
+// This example does NOT show current real world time
+
 #include "../src/ST7567.h"
 #include "hardware/rtc.h"
 #include "pico/util/datetime.h"
@@ -8,6 +11,8 @@
 #define DC_PIN 5
 #define CS_PIN 6
 #define RST_PIN 7
+
+#define SPI_ID spi0
 
 uint16_t spi_frequency = 100; // kHz
 
@@ -36,16 +41,16 @@ int main() {
   datetime_to_str(datetime_str, sizeof(datetime_buf), &t);
 
   // LCD
-  lcd_spi_init(spi0, MOSI_PIN, SCLK_PIN, DC_PIN, CS_PIN, RST_PIN, spi_frequency);
+  lcd_spi_init(SPI_ID, MOSI_PIN, SCLK_PIN, DC_PIN, CS_PIN, RST_PIN, spi_frequency);
   lcd_init();
   lcd_clear_screen();
 
   while (1 == 1) {
     rtc_get_datetime(&t);
 
-    sprintf(clock_string, "%d:%d:%d", t.hour, t.min, t.sec);
-    sprintf(date_string, "%d/%d/%d", t.day, t.month, t.year);
-    sscanf(datetime_buf, "%s", day_string);
+    sprintf(clock_string, "%d:%d:%d", t.hour, t.min, t.sec); // 17:54:39
+    sprintf(date_string, "%d/%d/%d", t.day, t.month, t.year); // 2/4/2025 (2. April)
+    sscanf(datetime_buf, "%s", day_string); // Wednesday
   
     lcd_clear_buffer();
     
