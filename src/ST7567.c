@@ -81,18 +81,24 @@ void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character) 
   
 }
 
-void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height) {
+void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t invert) {
+  if (invert > 1) {invert = 1;}
+
   uint16_t currentByte = 0;
   for (int8_t i = x; i < x + width; i++) { // Individual columns
     uint16_t currentY = y;
+
     for (int8_t j = 0; j < (height / 8); j++) {  // Individual bytes in 1 col
+
       for (int8_t bit = 7; bit >= 0; bit--) {  // Individual bits in 1 byte
-        // If the bit is NOT 1, draw pixel (inverted)
-        if (!((image[currentByte] >> bit) & 1)) {
+
+        if (((image[currentByte] >> bit) & 1) == invert) {
           lcd_draw_pixel(i, currentY, 1); 
         }
+
         currentY++;
       }
+
       currentByte++;
     }
   }
