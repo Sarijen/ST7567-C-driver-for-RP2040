@@ -4,8 +4,8 @@
 Inits SPI for the LCD, always required.  
 
 spi_id - SPI instance (SPI0 or SPI1)  
-Frequency - SCLK clocking speed in kHz  
-Minimum 1kHz and as fast as your display can handle, It is **NOT** my responsibility overdriving your hardware - stay below 20MHz if you want to be safe
+Frequency - SCLK clocking speed in `kHz`  
+Minimum 1kHz and as fast as your display can handle, It is **Your** own responsibility overdriving your hardware - stay below 20MHz if you want to be safe
 
 ### lcd_init()
 Inits the display, always required.
@@ -33,29 +33,28 @@ Sends the entire buffer to the display.
 
 > Note that "draw" functions only writes pixels to the buffer, you always have to call lcd_display() to actually see what you drew.
 
-> uint8_t value in draw functions represent pixel "color" to draw. 0 = white ("erases pixels"), anything other = black ("draws pixels").
+> `uint8_t value` in draw functions represent "color" to draw. 0 = white ("erases pixels"), anything other = black ("draws pixels").
 
 ### void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value)
 Writes a single pixel to the buffer.
 
 ### void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value)
-Draws a line from [x1, y1] to [x2, y2], works in all 4 quadrants
-Uses Bresenham's algorithm
+Draws a line from `x1  y1` to `x2 y2`, works in all 4 quadrants, uses Bresenham's algorithm
 
 ### void lcd_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t value)
-Draws a basic rectangle at x, y with width and height
+Draws a basic rectangle at `x y` with `width` and `height`
 
 ### void lcd_fill_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t value)
-Draws a fully filled rectangle at x, y with width and height 
+Draws a fully filled rectangle at `x y` with `width` and `height` 
 
 ### void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t invert)
-Draws a bitmap image at x,y with width and height  
+Draws a bitmap image at `x y` with `width` and `height`  
 First argument expects 1D uint8_t array  
 Your bitmap image has to be rotated 90° and flipped horizontaly
 
 ### void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character)
-Draws a single character at x, y with specified font.  
-There are 2 built-in fonts, font_5x8 and font_10x16.  
+Draws a single character at `x y` with specified font.  
+There are 2 built-in fonts, `font_5x8` and `font_10x16`.  
 Built-in fonts are limited to ASCII and does not include `~ $ @ |  ^ # &` characters _yet_.  
 You can also make your custom fonts and use this function for them
 .
@@ -65,7 +64,7 @@ Draws a series of characters with 1 pixel spacing between them at x, y
 ## Other
 
 ### void lcd_enable_pwm_brightness(uint8_t pin, uint8_t pwm_frequency)
-Inits PWM brightness, frequency in kHz  
+Inits PWM brightness, frequency in `kHz`
 Should work even if you underclocked/overclocked the MCU
 
 ### void lcd_set_brightness(uint8_t duty_cycle)
@@ -81,3 +80,40 @@ Pixels that are moved outside overflow to beggining
 
 ### void lcd_flip(uint8_t horizontaly, uint8_t verticaly)
 Flips the display content horizontaly/verticaly, does NOT touch the framebuffer
+
+ on the display, does NOT touch the framebuffer
+
+### void lcd_shift_horizontaly(uint8_t shift_amount)
+"Shifts" all pixels on the display, does NOT touch the framebuffer  
+Pixels that are moved outside overflow to beggining
+
+### void lcd_flip(uint8_t horizontaly, uint8_t verticaly)
+Flips the display content horizontaly/verticaly, does NOT touch the framebuffer
+
+s on the display, does NOT touch the framebuffer
+
+### void lcd_shift_horizontaly(uint8_t shift_amount)
+"Shifts" all pixels on the display, does NOT touch the framebuffer  
+Pixels that are moved outside overflow to beggining
+
+### void lcd_flip(uint8_t horizontaly, uint8_t verticaly)
+Flips the display content horizontaly/verticaly, does NOT touch the framebuffer
+
+es on the display, does NOT touch the framebuffer
+
+### void lcd_shift_horizontaly(uint8_t shift_amount)
+"Shifts" all pixels on the display, does NOT touch the framebuffer  
+Pixels that are moved outside overflow to beggining
+
+### void lcd_flip(uint8_t horizontaly, uint8_t verticaly)
+Flips the display content horizontaly/verticaly, does NOT touch the framebuffer
+
+ues on the display, does NOT touch the framebuffer
+
+### void lcd_shift_horizontaly(uint8_t shift_amount)
+"Shifts" all pixels on the display, does NOT touch the framebuffer  
+Pixels that are moved outside overflow to beggining
+
+### void lcd_flip(uint8_t horizontaly, uint8_t verticaly)
+Flips the display content horizontaly/verticaly, does NOT touch the framebuffer
+
