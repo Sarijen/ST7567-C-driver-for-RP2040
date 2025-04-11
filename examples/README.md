@@ -1,7 +1,7 @@
 # API Reference
 
 ### void lcd_spi_init(spi_inst_t* spi_id, uint8_t MOSI, uint8_t SCLK, uint8_t DC, uint8_t CS, uint8_t RST, uint16_t frequency)
-Inits SPI for the LCD, alawys required.  
+Inits SPI for the LCD, always required.  
 
 spi_id - SPI instance (SPI0 or SPI1)  
 Frequency - SCLK clocking speed in kHz  
