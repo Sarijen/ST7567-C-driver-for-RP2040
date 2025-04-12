@@ -50,7 +50,8 @@ static const uint8_t reset =            0b11100010;
 const uint8_t blankData = 0x00;
 
 void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[]) {
-  for (uint8_t i; i < strlen(string); i++) {
+  uint8_t string_length = strlen(string);
+  for (uint8_t i = 0; i < string_length; i++) {
     lcd_draw_character(x + ((font[0].width + 1) * i), y, font, string[i]);
   }
 }
