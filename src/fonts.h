@@ -16,4 +16,7 @@ typedef struct {
 extern font_table font_10x16[TABLE_SIZE_10X16];
 extern font_table font_5x8[TABLE_SIZE_5X8];
 
+// Special character required at the end of every font table
+extern uint8_t END_OF_TABLE[1];
+
 #endif
