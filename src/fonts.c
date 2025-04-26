@@ -1,5 +1,9 @@
 #include "fonts.h"
 
+// Special character required at the end of every font table
+// IMPORTANT: ALWAYS WIDTH = 0
+uint8_t END_OF_TABLE[1] = {0x00};
+
 // ====================== 10x16 ======================
 
 uint8_t space_10x16[20] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -97,9 +101,9 @@ uint8_t square_bracket_left_10x16[20] =  {0xff, 0xff, 0xff, 0xff, 0x00, 0xc0, 0x
 uint8_t square_bracket_right_10x16[20] =   {0xff, 0xff, 0xff, 0xff, 0xfc, 0xcf, 0xfc, 0xcf, 0xfc, 0xcf, 0xfc, 0xcf, 0x00, 0xc0, 0x00, 0xc0, 0xff, 0xff, 0xff, 0xff};
 uint8_t underscore_10x16[20] =           {0xff, 0xcf, 0xff, 0xcf, 0xff, 0xcf, 0xff, 0xcf, 0xff, 0xcf, 0xff, 0xcf, 0xff, 0xcf, 0xff, 0xcf, 0xff, 0xcf, 0xff, 0xcf};
 
-
 font_table font_10x16[TABLE_SIZE_10X16] = {
   {' ', 10, 16, space_10x16},
+
   // NUMBERS
   {'0', 10, 16, zero_10x16},
   {'1', 10, 16, one_10x16},
@@ -111,6 +115,7 @@ font_table font_10x16[TABLE_SIZE_10X16] = {
   {'7', 10, 16, seven_10x16},
   {'8', 10, 16, eight_10x16},
   {'9', 10, 16, nine_10x16},
+
   // UPPERCASE LETTERS
   {'A', 10, 16, A_10x16},
   {'B', 10, 16, B_10x16},
@@ -191,6 +196,8 @@ font_table font_10x16[TABLE_SIZE_10X16] = {
   {'[', 10, 16, square_bracket_left_10x16},
   {']', 10, 16, square_bracket_right_10x16},
   {'_', 10, 16, underscore_10x16},
+
+  {'!', 0, 0, END_OF_TABLE},
 };
 
 // ====================== 5x8 ======================
@@ -288,6 +295,7 @@ uint8_t underscore_5x8[5] =           {0xbf, 0xbf, 0xbf, 0xbf, 0xbf};
 
 font_table font_5x8[TABLE_SIZE_5X8] = {
   {' ', 5, 8, space_5x8},
+
   // NUMBERS
   {'0', 5, 8, zero_5x8},
   {'1', 5, 8, one_5x8},
@@ -299,6 +307,7 @@ font_table font_5x8[TABLE_SIZE_5X8] = {
   {'7', 5, 8, seven_5x8},
   {'8', 5, 8, eight_5x8},
   {'9', 5, 8, nine_5x8},
+
   // UPPERCASE LETTERS
   {'A', 5, 8, A_5x8},
   {'B', 5, 8, B_5x8},
@@ -326,6 +335,7 @@ font_table font_5x8[TABLE_SIZE_5X8] = {
   {'X', 5, 8, X_5x8},
   {'Y', 5, 8, Y_5x8},
   {'Z', 5, 8, Z_5x8},
+
   // LOWERCASE LETTERS
   {'a', 5, 8, a_5x8},
   {'b', 5, 8, b_5x8},
@@ -353,6 +363,7 @@ font_table font_5x8[TABLE_SIZE_5X8] = {
   {'x', 5, 8, x_5x8},
   {'y', 5, 8, y_5x8},
   {'z', 5, 8, z_5x8},
+
   // SPECIAL
   {'<', 5, 8, angle_bracket_left_5x8},
   {'>', 5, 8, angle_bracket_right_5x8},
@@ -377,4 +388,6 @@ font_table font_5x8[TABLE_SIZE_5X8] = {
   {'[', 5, 8, square_bracket_left_5x8},
   {']', 5, 8, square_bracket_right_5x8},
   {'_', 5, 8, underscore_5x8},
+
+  {'!', 0, 0, END_OF_TABLE},
 };

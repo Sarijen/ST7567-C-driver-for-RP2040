@@ -58,14 +58,25 @@ void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[]) {
 
 void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character) {
   uint8_t* bitmap_data;
-  uint8_t matching_char;
-  for (matching_char = 0; matching_char < 86; matching_char++) {
+  uint8_t matching_char = 0;
+
+  while (1) { // Find our character in the font table
     if (character == font[matching_char].character) {
       bitmap_data = font[matching_char].bitmap_data;
       break;
     }
+
+    // If a character that isn't supported is given, use the first character
+    // End of font table is indicated as a character with width = 0
+    if (font[matching_char].width == 0) {
+      bitmap_data = font[0].bitmap_data;
+      break;
+    }
+
+    matching_char++;
   }
 
+  // Draw our character
   uint8_t currentByte = 0;
   for (int i = x; i < x + font[matching_char].width; i++) {
     int currentY = y;
