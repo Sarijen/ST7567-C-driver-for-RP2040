@@ -240,13 +240,16 @@ pwmConfig pwm = {
 
 void lcd_enable_pwm_brightness(uint8_t pin, uint8_t pwm_frequency) {
   pwm.pin = pin;
+  gpio_set_function(pwm.pin, GPIO_FUNC_PWM);
+
+  pwm_config config = pwm_get_default_config();
 
   uint16_t sys_frequency = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_SYS) / 1000;
   pwm.wrapping_point = (1000000 / pwm_frequency) / (1000 / sys_frequency);
+  pwm_config_set_wrap(&config, pwm.wrapping_point);
   
-  gpio_set_function(pwm.pin, GPIO_FUNC_PWM);
   pwm.slice_num = pwm_gpio_to_slice_num(pwm.pin);
-  pwm_set_wrap(pwm.slice_num, pwm.wrapping_point);
+  pwm_init(pwm.slice_num, &config, false);
 }
 
 void lcd_set_brightness(uint8_t duty_cycle) {
@@ -267,11 +270,9 @@ void lcd_set_brightness(uint8_t duty_cycle) {
   // BUT here we multiply duty cycle first and then convert, thus avoiding floating-point operations
   uint16_t time_ON = (duty_cycle * pwm.wrapping_point) / 100;
 
-  if ((pwm.pin % 2) == 0) { // Even pins are channel A, B are odd
-    pwm_set_chan_level(pwm.slice_num, PWM_CHAN_A, time_ON);
-  } else {
-    pwm_set_chan_level(pwm.slice_num, PWM_CHAN_B, time_ON);
-  }
+  uint channel = pwm_gpio_to_channel(pwm.pin);
+  pwm_set_chan_level(pwm.slice_num, channel, time_ON);
+
   pwm_set_enabled(pwm.slice_num, true);
 }
 
