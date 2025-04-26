@@ -1,13 +1,6 @@
 #include "ST7567.h"
 
-spiConfig spi = {
-  0, // SPI instance
-  0, // MOSI pin
-  0, // SCLK pin
-  0, // DC pin
-  0, // CS pin
-  0, // RST pin
-};
+static spiConfig spi;
 
 #define LCD_WIDTH 128
 #define LCD_HEIGHT 64
@@ -47,7 +40,7 @@ static uint8_t displayInverted = 0;
 static const uint8_t NOP =              0b11100011;
 static const uint8_t reset =            0b11100010;
 
-const uint8_t blankData = 0x00;
+static const uint8_t blankData = 0x00;
 
 void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[]) {
   uint8_t string_length = strlen(string);
@@ -163,8 +156,8 @@ void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value
 }
 
 void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value) { // Calculates x, y to bits location in the buffer
-  uint8_t page = y / 8;
-  uint16_t byte_index = (128 * page + x);
+  uint8_t page = y / PAGE_COUNT;
+  uint16_t byte_index = (LCD_WIDTH * page + x);
   uint8_t bit_position = (y % 8);
   if (value == 0) {
     frameBuffer[byte_index] &= ~(1 << bit_position);  
@@ -173,6 +166,7 @@ void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value) { // Calculates x, y to
   }
   //lcd_display(); // Sends the entire buffer after every pixel draw, VERY SLOW!
 }
+
 
 void lcd_flip(uint8_t horizontaly, uint8_t verticaly) {
   if (horizontaly > 1 || verticaly > 1) {
@@ -184,6 +178,7 @@ void lcd_flip(uint8_t horizontaly, uint8_t verticaly) {
   lcd_display();
 }
 
+
 void lcd_shift_horizontaly(uint8_t shift_amount) {
   if (shift_amount > 63) {
     printf("Warning: You cannot shift horizontaly more than 63 pixels.\n");
@@ -191,6 +186,7 @@ void lcd_shift_horizontaly(uint8_t shift_amount) {
   }
   send_command(setStartLine | shift_amount);
 }
+
 
 void lcd_toggle_invert() {
   if (displayInverted) {
@@ -201,6 +197,7 @@ void lcd_toggle_invert() {
     displayInverted = 1;
   }
 }
+
 
 void lcd_display() {
   for (uint8_t currentPage = 0; currentPage < 8; currentPage++) { // Set the right Page and Col addresses
@@ -214,11 +211,13 @@ void lcd_display() {
   }
 }
 
+
 void lcd_clear_buffer() { // Fills the buffer on MCU with 0s
   for (uint16_t byte = 0; byte < 1024; byte++) {
     frameBuffer[byte] = blankData;
   }
 }
+
 
 void lcd_clear_screen() { // Fills the screen with 0s
   for (uint8_t currentPage = 0; currentPage < 8; currentPage++) {
@@ -232,10 +231,11 @@ void lcd_clear_screen() { // Fills the screen with 0s
   }
 }
 
-pwmConfig pwm = {
-  69, // slice num (69 if doesn't exist)
-  0,  // wrapping point
-  15  // pin number
+
+static pwmConfig pwm = {
+  .slice_num = 69, // (69 if doesn't exist)
+  .wrapping_point = 0, 
+  .pin = 15, 
 };
 
 void lcd_enable_pwm_brightness(uint8_t pin, uint8_t pwm_frequency) {
@@ -251,6 +251,7 @@ void lcd_enable_pwm_brightness(uint8_t pin, uint8_t pwm_frequency) {
   pwm.slice_num = pwm_gpio_to_slice_num(pwm.pin);
   pwm_init(pwm.slice_num, &config, false);
 }
+
 
 void lcd_set_brightness(uint8_t duty_cycle) {
   if (pwm.slice_num == 69) {
@@ -276,6 +277,7 @@ void lcd_set_brightness(uint8_t duty_cycle) {
   pwm_set_enabled(pwm.slice_num, true);
 }
 
+
 void lcd_set_contrast(uint8_t RR_value, uint8_t EV_value) {
   if (EV_value > 63) {EV_value = 63;}
   if (RR_value > 7) {RR_value = 7;}
@@ -285,11 +287,13 @@ void lcd_set_contrast(uint8_t RR_value, uint8_t EV_value) {
   send_command(EVset | EV_value); // 0x1F recommended
 }
 
+
 static inline void send_command(uint8_t command) {
   gpio_put(spi.CS, 0);
   spi_write_blocking(spi.ID, &command, 1);
   gpio_put(spi.CS, 1);
 }
+
 
 static inline void send_data(uint8_t data) {
   gpio_put(spi.DC, 1);
@@ -299,12 +303,14 @@ static inline void send_data(uint8_t data) {
   gpio_put(spi.DC, 0);
 }
 
+
 void lcd_reset() {
   gpio_put(spi.RST, 0);
   sleep_us(2);
   gpio_put(spi.RST, 1);
   sleep_us(1);
 }
+
 
 void lcd_init() {
   lcd_reset();
@@ -324,6 +330,7 @@ void lcd_init() {
   send_command(displayON);
   send_command(allPixelsNormal);
 }
+
 
 void lcd_spi_init(
     spi_inst_t* spi_id, 
@@ -365,8 +372,8 @@ void lcd_spi_init(
   gpio_set_function(spi.SCLK, GPIO_FUNC_SPI);
   spi_set_format(spi.ID,
     8,             // 8 bits per transfer
-    SPI_CPOL_0,    // Clock polarity 
-    SPI_CPHA_0,    // Clock phase 
+    SPI_CPOL_0,    // SCLK 0V at idle
+    SPI_CPHA_0,    // Sampling edge (Rising in this case)
     SPI_MSB_FIRST  // Most significant bit first
   );
 }
