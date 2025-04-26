@@ -9,6 +9,9 @@ It includes functions for initializing the display, drawing graphics and pixels 
 - Displaying bitmap images
 - PWM dimmable backlight
 
+# Showcase
+<img src="images/showcase.gif" width="300"/>
+
 # Wiring Diagram
 - Wiring doesn't have to be exactly the same as shown below, just ensure you use `correct` SPI pins for your chosen instance (`SPI0` or `SPI1`)
 - The driver will only work if you specify pin numbers and chosen SPI instance based on your wiring correctly.

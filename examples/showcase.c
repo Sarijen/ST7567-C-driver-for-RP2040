@@ -13,7 +13,7 @@
 #define SPI_ID spi0
 
 #define BLK_PIN 15
-#define DIMMING_FREQUENCY 5 // kHz
+#define DIMMING_FREQUENCY 1 // kHz
 
 uint16_t spi_frequency = 700; // kHz
 
@@ -30,7 +30,7 @@ int main() {
   lcd_set_brightness(50); // %
 
   // First argument changes contrast a lot, second is for further fine tuning
-  lcd_set_contrast(5, 21);
+  lcd_set_contrast(4, 21);
  
   while(1) {
 // ==================== INTRO ==============================
