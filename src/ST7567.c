@@ -42,12 +42,14 @@ static const uint8_t reset =            0b11100010;
 
 static const uint8_t blankData = 0x00;
 
+
 void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[]) {
   uint8_t string_length = strlen(string);
   for (uint8_t i = 0; i < string_length; i++) {
     lcd_draw_character(x + ((font[0].width + 1) * i), y, font, string[i]);
   }
 }
+
 
 void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character) {
   uint8_t* bitmap_data;
@@ -83,8 +85,8 @@ void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character) 
       currentByte++;
     }
   }
-  
 }
+
 
 void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t invert) {
   if (invert > 1) {invert = 1;}
@@ -109,6 +111,7 @@ void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t
   }
 }
 
+
 void lcd_fill_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t value) {
   uint8_t dx = x + width;
   uint8_t dy = y + height;
@@ -119,6 +122,7 @@ void lcd_fill_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t 
     }            //  x  y
   }
 }
+
 
 void lcd_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t value) {
   uint8_t dx = x + width; 
@@ -132,6 +136,7 @@ void lcd_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t 
     }
   }
 }
+
 
 void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value) { // Bresenham's algorithm used
   uint8_t dx = abs(x2 - x1); 
@@ -154,6 +159,7 @@ void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value
     }
   }
 }
+
 
 void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value) { // Calculates x, y to bits location in the buffer
   uint8_t page = y / PAGE_COUNT;
@@ -188,7 +194,7 @@ void lcd_shift_horizontaly(uint8_t shift_amount) {
 }
 
 
-void lcd_toggle_invert() {
+void lcd_toggle_invert(void) {
   if (displayInverted) {
     send_command(invertDisplay & ~1); // Flips the last bit
     displayInverted = 0;
@@ -199,7 +205,7 @@ void lcd_toggle_invert() {
 }
 
 
-void lcd_display() {
+void lcd_display(void) {
   for (uint8_t currentPage = 0; currentPage < 8; currentPage++) { // Set the right Page and Col addresses
     send_command(setPageAddr | currentPage);
     send_command(setColAddrH); // Resets the Column Address for every page
@@ -212,14 +218,14 @@ void lcd_display() {
 }
 
 
-void lcd_clear_buffer() { // Fills the buffer on MCU with 0s
+void lcd_clear_buffer(void) { // Fills the buffer on MCU with 0s
   for (uint16_t byte = 0; byte < 1024; byte++) {
     frameBuffer[byte] = blankData;
   }
 }
 
 
-void lcd_clear_screen() { // Fills the screen with 0s
+void lcd_clear_screen(void) { // Fills the screen with 0s
   for (uint8_t currentPage = 0; currentPage < 8; currentPage++) {
     send_command(setPageAddr | currentPage);
     send_command(setColAddrH); 
@@ -304,7 +310,7 @@ static inline void send_data(uint8_t data) {
 }
 
 
-void lcd_reset() {
+void lcd_reset(void) {
   gpio_put(spi.RST, 0);
   sleep_us(2);
   gpio_put(spi.RST, 1);
@@ -312,7 +318,7 @@ void lcd_reset() {
 }
 
 
-void lcd_init() {
+void lcd_init(void) {
   lcd_reset();
 
   send_command(displayOFF);

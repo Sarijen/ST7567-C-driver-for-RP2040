@@ -39,16 +39,16 @@ void lcd_spi_init(
     uint8_t RST,
     uint16_t frequency); // in kHz
 
-void lcd_init();
-void lcd_reset();
+void lcd_init(void);
+void lcd_reset(void);
 void lcd_set_contrast(uint8_t RR_value, uint8_t EV_value);
 void lcd_enable_pwm_brightness(uint8_t pin, uint8_t pwm_frequency); // frequency in kHz
 void lcd_set_brightness(uint8_t duty_cycle); // in %
 
-void lcd_clear_screen();
-void lcd_clear_buffer();
-void lcd_display();
-void lcd_toggle_invert();
+void lcd_clear_screen(void);
+void lcd_clear_buffer(void);
+void lcd_display(void);
+void lcd_toggle_invert(void);
 void lcd_shift_horizontaly(uint8_t shift_amount);
 void lcd_flip(uint8_t horizontaly, uint8_t verticaly);
 
