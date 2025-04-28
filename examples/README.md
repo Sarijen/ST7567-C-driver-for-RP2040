@@ -5,7 +5,7 @@ Inits SPI for the LCD, always required.
 
 spi_id - SPI instance (SPI0 or SPI1)  
 frequency in `kHz`  
-Range is from 1kHz to fast as your display can handle, It is **Your** own responsibility overdriving your hardware - stay below 20MHz if you want to be safe
+I was able to run it as low as `1kHz` and as high as `66MHz`! If you want to be safe stay below 20MHz, im not responsible for any damage!  
 
 ### lcd_init()
 Inits the display, always required.
@@ -37,7 +37,7 @@ The stuff you drew will never be displayed until you call this function!!!
 > `uint8_t value` in draw functions represent "color" to draw. 0 = white ("erases pixels"), anything other = black ("draws pixels").
 
 ### void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value)
-Writes a single pixel to the buffer.
+Writes a single pixel at `x` `y` to the buffer.
 
 ### void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value)
 Draws a line from `x1  y1` to `x2 y2`, works in all 4 quadrants, uses Bresenham's algorithm
@@ -82,17 +82,6 @@ Pixels that are moved outside overflow to beggining
 ### void lcd_flip(uint8_t horizontaly, uint8_t verticaly)
 Flips the display content horizontaly/verticaly, does NOT touch the framebuffer
 
- on the display, does NOT touch the framebuffer
-
-### void lcd_shift_horizontaly(uint8_t shift_amount)
-"Shifts" all pixels on the display, does NOT touch the framebuffer  
-Pixels that are moved outside overflow to beggining
-
-### void lcd_flip(uint8_t horizontaly, uint8_t verticaly)
-Flips the display content horizontaly/verticaly, does NOT touch the framebuffer
-
-s on the display, does NOT touch the framebuffer
-
 ### void lcd_shift_horizontaly(uint8_t shift_amount)
 "Shifts" all pixels on the display, does NOT touch the framebuffer  
 Pixels that are moved outside overflow to beggining
@@ -109,6 +98,14 @@ Flips the display content horizontaly/verticaly, does NOT touch the framebuffer
 
 ### void lcd_shift_horizontaly(uint8_t shift_amount)
 "Shifts" all pixels on the display, does NOT touch the framebuffer  
+Pixels that are moved outside overflow to beggining
+
+### void lcd_flip(uint8_t horizontaly, uint8_t verticaly)
+Flips the display content horizontaly/verticaly, does NOT touch the framebuffer
+
+### void lcd_shift_horizontaly(uint8_t shift_amount)
+"Shifts" all pixels on the display, does NOT touch the framebuffer  
+
 Pixels that are moved outside overflow to beggining
 
 ### void lcd_flip(uint8_t horizontaly, uint8_t verticaly)
