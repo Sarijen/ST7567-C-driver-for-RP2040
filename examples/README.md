@@ -51,7 +51,7 @@ Draws a fully filled rectangle at `x y` with `width` and `height`
 ### void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t invert)
 Draws a bitmap image at `x y` with `width` and `height`  
 First argument expects 1D uint8_t array  
-Your bitmap image has to be rotated 90° and flipped horizontaly
+Your bitmap image has to be rotated 90° and flipped horizontally
 
 ### void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character)
 Draws a single character at `x y` with specified font.  
@@ -75,10 +75,10 @@ Duty cycle in % = brightness in %
 ### void lcd_toggle_invert()
 Inverts all pixel values on the display, does NOT touch the framebuffer
 
-### void lcd_shift_horizontaly(uint8_t shift_amount)
+### void lcd_shift_horizontally(uint8_t shift_amount)
 "Shifts" all pixels on the display, does NOT touch the framebuffer  
 Pixels that are moved outside overflow to beggining
 
-### void lcd_flip(uint8_t horizontaly, uint8_t verticaly)
-Flips the display content horizontaly/verticaly, does NOT touch the framebuffer
+### void lcd_flip(uint8_t horizontally, uint8_t vertically)
+Flips the display content horizontally/vertically, does NOT touch the framebuffer
 

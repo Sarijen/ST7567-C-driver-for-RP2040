@@ -175,20 +175,20 @@ void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value) { // Calculates x, y to
 }
 
 
-void lcd_flip(uint8_t horizontaly, uint8_t verticaly) {
-  if (horizontaly > 1 || verticaly > 1) {
+void lcd_flip(uint8_t horizontally, uint8_t vertically) {
+  if (horizontally > 1 || vertically > 1) {
     printf("Error: Flipping values can only be 0 or 1\n"); 
     return;
   }
-  send_command((horizontaly) ? comInvDirection : comDirection);
-  send_command((verticaly) ? segInvDirection : segDirection);
+  send_command((horizontally) ? comInvDirection : comDirection);
+  send_command((vertically) ? segInvDirection : segDirection);
   lcd_display();
 }
 
 
-void lcd_shift_horizontaly(uint8_t shift_amount) {
+void lcd_shift_horizontally(uint8_t shift_amount) {
   if (shift_amount > 63) {
-    printf("Warning: You cannot shift horizontaly more than 63 pixels.\n");
+    printf("Warning: You cannot shift horizontally more than 63 pixels.\n");
     shift_amount = 63;
   }
   send_command(setStartLine | shift_amount);
