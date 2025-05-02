@@ -12,13 +12,14 @@ It includes functions for initializing the display, drawing graphics and pixels 
 # Showcase
 <img src="images/showcase.gif" width="300"/>
 
+###### showcase.c example code
+
 # Wiring Diagram
 - Wiring doesn't have to be exactly the same as shown below, just ensure you use `correct` SPI pins for your chosen instance (`SPI0` or `SPI1`)
-- The driver will only work if you specify pin numbers and chosen SPI instance based on your wiring correctly.
 - `CS` pin can be connected to any GPIO pin you want, assuming you specify it correctly in your code
 
 
-<img src="images/wiringDiagram.png" width="500"/>
+<img src="images/wiringDiagram.png" width="550"/>
 
 | Pico | Display |
 | :------: |:----:|
@@ -68,4 +69,4 @@ For PWM dimming use a transistor/MOSFET, connecting base to `any GPIO`, Collecto
     #include "ST7567.h"
     ```
 
-4. Properly use the library, check `examples` folder for API reference and proper usage.
+4. Properly use the library, check `examples` folder for [API reference](examples/README.md) and proper usage.
