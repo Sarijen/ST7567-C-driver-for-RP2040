@@ -40,8 +40,6 @@ static uint8_t displayInverted = 0;
 static const uint8_t NOP =              0b11100011;
 static const uint8_t reset =            0b11100010;
 
-static const uint8_t blankData = 0x00;
-
 
 void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[]) {
   uint8_t string_length = strlen(string);
@@ -53,7 +51,7 @@ void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[]) {
 
 void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character) {
   uint8_t* bitmap_data;
-  uint8_t matching_char = 0;
+  uint16_t matching_char = 0;
 
   while (1) { // Find our character in the font table
     if (character == font[matching_char].character) {
@@ -72,11 +70,11 @@ void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character) 
   }
 
   // Draw our character
-  uint8_t currentByte = 0;
-  for (int i = x; i < x + font[matching_char].width; i++) {
+  uint16_t currentByte = 0;
+  for (uint8_t i = x; i < x + font[matching_char].width; i++) {
     int currentY = y;
-    for (int j = 0; j < (font[matching_char].height / 8); j++) {
-      for (int bit = 0; bit < 8; bit++) {
+    for (uint8_t j = 0; j < (font[matching_char].height / 8); j++) {
+      for (uint8_t bit = 0; bit < 8; bit++) {
         if (!((bitmap_data[currentByte] >> bit) & 1)) {
           lcd_draw_pixel(i, currentY, 1);
         }
@@ -162,9 +160,12 @@ void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value
 
 
 void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value) { // Calculates x, y to bits location in the buffer
-  uint8_t page = y / PAGE_COUNT;
+  if (x >= LCD_WIDTH || y > LCD_HEIGHT) {return;}
+
+  uint8_t page = y / 8; // Pages are 8bits high
   uint16_t byte_index = (LCD_WIDTH * page + x);
   uint8_t bit_position = (y % 8);
+
   if (value == 0) {
     frameBuffer[byte_index] &= ~(1 << bit_position);  
   } else {
@@ -206,33 +207,37 @@ void lcd_toggle_invert(void) {
 
 
 void lcd_display(void) {
-  for (uint8_t currentPage = 0; currentPage < 8; currentPage++) { // Set the right Page and Col addresses
+  for (uint8_t currentPage = 0; currentPage < PAGE_COUNT; currentPage++) { // Set the right Page and Col addresses
     send_command(setPageAddr | currentPage);
     send_command(setColAddrH); // Resets the Column Address for every page
     send_command(setColAddrL);
 
-    for (uint16_t j = currentPage*128; j < (currentPage*128) + 128; j++) { // Every page is 128 bytes long 
-      send_data(frameBuffer[j]); // Sending bytes of buffer to the display
+    uint16_t currentPageIndex = currentPage * LCD_WIDTH;
+
+    for (uint16_t byte = currentPageIndex; byte < currentPageIndex + LCD_WIDTH; byte++) { // Every page is 128 bytes long 
+      send_data(frameBuffer[byte]); // Sending bytes of buffer to the display
     }
   }
 }
 
 
 void lcd_clear_buffer(void) { // Fills the buffer on MCU with 0s
-  for (uint16_t byte = 0; byte < 1024; byte++) {
-    frameBuffer[byte] = blankData;
+  uint16_t frameBufferSize = LCD_WIDTH * PAGE_COUNT;
+
+  for (uint16_t byte = 0; byte < frameBufferSize; byte++) {
+    frameBuffer[byte] = 0x00;
   }
 }
 
 
 void lcd_clear_screen(void) { // Fills the screen with 0s
-  for (uint8_t currentPage = 0; currentPage < 8; currentPage++) {
+  for (uint8_t currentPage = 0; currentPage < PAGE_COUNT; currentPage++) {
     send_command(setPageAddr | currentPage);
     send_command(setColAddrH); 
     send_command(setColAddrL); 
 
-    for (uint8_t j = 0; j < 128; j++) { 
-      send_data(blankData);
+    for (uint8_t i = 0; i < LCD_WIDTH; i++) { 
+      send_data(0x00);
     }
   }
 }
