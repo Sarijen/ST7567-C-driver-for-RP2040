@@ -50,7 +50,7 @@ void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[]) {
 
 
 void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character) {
-  uint8_t* bitmap_data;
+  const uint8_t* bitmap_data;
   uint16_t matching_char = 0;
 
   while (1) { // Find our character in the font table
