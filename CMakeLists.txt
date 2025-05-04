@@ -26,11 +26,8 @@ add_executable(ST7567_example
   src/ST7567.c
   src/fonts.c
 
- examples/bare_minimum.c
-# examples/showcase.c
-# examples/shapes.c
-# examples/images.c
-# examples/fonts.c
+# examples/bare_minimum.c
+ examples/showcase.c
 # examples/custom_fonts/seamless_segments.c examples/custom_fonts/custom_fonts.c
 # examples/digital_clock.c
 # examples/beta_example.c # only for personal testing - NOT INCLUDED

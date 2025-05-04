@@ -21,7 +21,7 @@ It includes functions for initializing the display, drawing graphics and pixels 
 
 <img src="images/wiringDiagram.png" width="550"/>  
 
-> Resistor for LED pin not required 
+> Resistor for NC/LED pin not required 
 
 | Pico | Display |
 | :------: |:----:|
@@ -50,17 +50,32 @@ For software controlled backlighting (PWM):
 ## Built-in example code
 1. Make sure you have [pico SDK](https://github.com/raspberrypi/pico-sdk) installed and working on your machine
 2. `git clone` this repo and set `PICO_SDK_PATH` in it
-3. Choose 1 example by uncommenting it in CMakeLists.txt
-4. build and compile using
+3. Build using
 
     ```
     mkdir build
     cd build
     cmake ..
-    make
     ```
 
-5. Flash the ST7567_example.uf2 located in the same directory. 
+4. Compile using `make` in build/
+5. Flash the ST7567_example.uf2 located build/ 
+
+6. You can choose different examples in CMakeLists.txt  
+`Only 1 example can be uncommented at a time!`  
+
+    ```
+      add_executable(ST7567_example
+        src/ST7567.c
+        src/fonts.c
+
+        #examples/bare_minimum.c
+        #examples/showcase.c
+        examples/digital_clock.c <- Selected
+        ...
+      )
+    ```
+    Repeat steps 4. and 5.
 
 ## Integrating into your codebase
 1. `git clone` this repo inside your project
