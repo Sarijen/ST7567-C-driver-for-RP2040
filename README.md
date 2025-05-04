@@ -12,14 +12,16 @@ It includes functions for initializing the display, drawing graphics and pixels 
 # Showcase
 <img src="images/showcase.gif" width="300"/>
 
-###### showcase.c example code
+###### [showcase.c](examples/showcase.c) example code
 
 # Wiring Diagram
 - Wiring doesn't have to be exactly the same as shown below, just ensure you use `correct` SPI pins for your chosen instance (`SPI0` or `SPI1`)
 - `CS` pin can be connected to any GPIO pin you want, assuming you specify it correctly in your code
 
 
-<img src="images/wiringDiagram.png" width="550"/>
+<img src="images/wiringDiagram.png" width="550"/>  
+
+> Resistor for LED pin not required 
 
 | Pico | Display |
 | :------: |:----:|
@@ -30,11 +32,18 @@ It includes functions for initializing the display, drawing graphics and pixels 
 | Any GPIO | DC |
 | Any GPIO | CS |
 | Any GPIO | RST |
-| GND | NC/LED |
+| GND | NC/LED |  
 
-Connect `NC/LED` pin to `GND` to enable backlight.
 
-For PWM dimming use a transistor/MOSFET, connecting base to `any GPIO`, Collector/Emitter to `GND` and `NC/LED`.
+For fixed backlighting:  
+- Connect a resistor from `NC/LED` to `GND`  
+
+For software controlled backlighting (PWM):  
+- You will need a transistor/MOSFET  
+- Connect `NC/LED` to `Emitter`  
+- Connect MCU `GND` to `Collector`  
+- Connect `Base` to the GPIO you provided in the code  
+- Use lcd_enable_pwm_brightness and lcd_set_brightness functions
 
 # Usage
 
