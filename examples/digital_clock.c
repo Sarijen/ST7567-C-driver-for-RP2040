@@ -44,6 +44,7 @@ int main() {
   lcd_spi_init(SPI_ID, MOSI_PIN, SCLK_PIN, DC_PIN, CS_PIN, RST_PIN, spi_frequency);
   lcd_init();
   lcd_clear_screen();
+  lcd_set_contrast(4, 21);
 
   while (1 == 1) {
     rtc_get_datetime(&t);

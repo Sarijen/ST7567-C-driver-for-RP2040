@@ -1,6 +1,6 @@
 #include "seamless_segments.h"
 
-// Font created by Posy (Michiel de Boer) 2022
+// Font by Posy (Michiel de Boer) 2022
 // https://michieldb.nl/
 // Checkout his awesome work!
 

@@ -1,8 +1,9 @@
 // Implementation of custom fonts
-// Font created by Posy (Michiel de Boer) 2022 
+// Fonts by Posy (Michiel de Boer) 2022 
 
 #include "../../src/ST7567.h"
 #include "seamless_segments.h" // Our custom font
+#include "x15_segments.h"
 
 // CHANGE THESE!
 #define MOSI_PIN 3 
@@ -25,27 +26,20 @@ int main() {
   lcd_clear_screen();  
 
   lcd_enable_pwm_brightness(BLK_PIN, DIMMING_FREQUENCY);
-  lcd_set_brightness(50);
+  lcd_set_brightness(10);
 
   lcd_set_contrast(4, 21);
 
-  //              x   y   custom font name   string
-  lcd_draw_string(1,  10, seamless_segments, "17");
-  lcd_draw_string(70, 10, seamless_segments, "54");
+  char* num_list[10] = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
-  uint8_t dot_size = 8;
-  while (1) {
-    lcd_fill_rect(55, 15, dot_size, dot_size, 1);
-    lcd_fill_rect(55, 35, dot_size, dot_size, 1);
+
+  for (uint8_t num = 0; num < 10; num++) {
+    char* current_num = num_list[num];
+    lcd_draw_string(30, 10, seamless_segments, current_num);
+    lcd_draw_string(79, 10, x15_segments, current_num);
     lcd_display();
-
-    sleep_ms(1000);
-
-    lcd_fill_rect(55, 15, dot_size, dot_size, 0);
-    lcd_fill_rect(55, 35, dot_size, dot_size, 0);
-    lcd_display();
-
-    sleep_ms(1000);  
+    sleep_ms(900);
+    lcd_clear_buffer();
   }
 
   return 0;
