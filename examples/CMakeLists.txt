@@ -15,7 +15,7 @@ elseif(BUILD_EXAMPLE STREQUAL "custom_fonts")
   )
 
 elseif(BUILD_EXAMPLE STREQUAL "beta_example")
-  message(WARNING "'beta_example' is for personal testing only and will never be included in this repo!")
+  message(WARNING "'beta_example' is for personal testing only and will never be included in remote repo!")
   add_executable(ST7567_example beta_example.c)
 
 else()

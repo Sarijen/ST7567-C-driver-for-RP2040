@@ -1,6 +1,5 @@
 # ST7567 driver for RPi Pico (RP2040)
-This driver allows you to control a ST7567 based LCD using SPI with the RP2040 MCU.
-It includes functions for initializing the display, drawing graphics and pixels using a framebuffer, dimming the backlight and more.
+This driver allows you to control ST7567 LCD using SPI with the RP2040. Made to easily test functionality of the display or be [integrated as a library to your project](#integrating-into-your-codebase)
 
 # Features
 - Clearable and easily writable framebuffer 
@@ -12,7 +11,7 @@ It includes functions for initializing the display, drawing graphics and pixels 
 # Showcase
 <img src="images/showcase.gif" width="300"/>
 
-###### [showcase.c](examples/showcase.c) example code
+###### This GIF is [showcase.c](examples/showcase.c) example code
 
 # Wiring Diagram
 - Wiring doesn't have to be exactly the same as shown below, just ensure you use `correct` SPI pins for your chosen instance (`SPI0` or `SPI1`)
@@ -21,7 +20,7 @@ It includes functions for initializing the display, drawing graphics and pixels 
 
 <img src="images/wiringDiagram.png" width="550"/>  
 
-> Resistor for NC/LED pin not required 
+> Resistor for NC/LED pin is not stricly required 
 
 | Pico | Display |
 | :------: |:----:|
@@ -55,26 +54,14 @@ For software controlled backlighting (PWM):
     ```
     mkdir build
     cd build
-    cmake ..
+    cmake .. -DBUILD_EXAMPLE="bare_minimum"
     ```
 
 4. Compile using `make` in build/
 5. Flash the ST7567_example.uf2 located build/ 
 
-6. You can choose different examples in CMakeLists.txt  
-`Only 1 example can be uncommented at a time!`  
-
-    ```
-      add_executable(ST7567_example
-        src/ST7567.c
-        src/fonts.c
-
-        #examples/bare_minimum.c
-        #examples/showcase.c
-        examples/digital_clock.c <- Selected
-        ...
-      )
-    ```
+6. To build different example code simply:  
+    Run `cmake .. -DBUILD_EXAMPLE=<example_name>` once   
     Repeat steps 4. and 5.
 
 ## Integrating into your codebase
