@@ -1,16 +1,8 @@
 // Code used to showcase features of this driver library
 
 #include "../src/ST7567.h"
+#include "pinout.h"
 #include "showcase_image.c"
-
-// CHANGE THESE!
-#define MOSI_PIN 3 
-#define SCLK_PIN 2
-#define DC_PIN 5
-#define CS_PIN 6
-#define RST_PIN 7
-
-#define SPI_ID spi0
 
 #define BLK_PIN 15
 #define DIMMING_FREQUENCY 1 // kHz

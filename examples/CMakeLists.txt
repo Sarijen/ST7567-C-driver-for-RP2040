@@ -2,7 +2,7 @@ if(BUILD_EXAMPLE STREQUAL "bare_minimum")
   add_executable(ST7567_example  bare_minimum.c)
 
 elseif(BUILD_EXAMPLE STREQUAL "showcase")
-  add_executable(ST7567_example showcase.c showcase_image.c)
+  add_executable(ST7567_example showcase.c)
 
 elseif(BUILD_EXAMPLE STREQUAL "digital_clock")
   add_executable(ST7567_example digital_clock.c)

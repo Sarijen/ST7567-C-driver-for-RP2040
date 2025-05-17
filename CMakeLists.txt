@@ -19,9 +19,9 @@ target_link_libraries(
   ST7567
   pico_stdlib
   hardware_spi
-  hardware_gpio
   hardware_pwm
   hardware_clocks
+  hardware_rtc
 )
 
 
