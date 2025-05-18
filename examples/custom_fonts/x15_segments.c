@@ -1,6 +1,6 @@
 #include "x15_segments.h"
 
-// Font by Posy (Michiel de Boer) 2022
+// Original design "X 15" by Posy (Michiel de Boer) 2022
 // https://michieldb.nl/
 // Checkout his awesome work!
 

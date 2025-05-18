@@ -11,6 +11,7 @@ elseif(BUILD_EXAMPLE STREQUAL "custom_fonts")
   add_executable(ST7567_example
     custom_fonts/custom_fonts.c
     custom_fonts/seamless_segments.c
+    custom_fonts/freeform_segments.c
     custom_fonts/x15_segments.c
   )
 
