@@ -2,15 +2,7 @@
 // Smiley face not required
 
 #include "../src/ST7567.h"
-
-// CHANGE THESE
-#define MOSI_PIN 3
-#define SCLK_PIN 2
-#define DC_PIN 5
-#define CS_PIN 6
-#define RST_PIN 7
-
-#define SPI_ID spi0
+#include "pinout.h"
 
 uint16_t spi_frequency = 100; // kHz
 
