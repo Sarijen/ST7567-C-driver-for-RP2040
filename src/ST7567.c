@@ -45,7 +45,7 @@ void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[]) {
   uint8_t string_length = strlen(string);
   uint8_t char_offset = font[0].width + 1;
 
-  for (uint8_t current_char = 0; current_char < string_length; i++) {
+  for (uint8_t current_char = 0; current_char < string_length; current_char++) {
     lcd_draw_character(x + (char_offset * current_char), y, font, string[current_char]);
   }
 }
