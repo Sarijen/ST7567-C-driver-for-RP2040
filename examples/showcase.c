@@ -135,11 +135,28 @@ int main() {
     lcd_draw_string(25, 1, font_5x8,    "Bitmap fonts");
     lcd_draw_line(0, 10, 127, 10, 1);
     lcd_draw_string(1, 15, font_5x8,    "ABCDEFGHIJKLMNOPQRSTU");
-    lcd_draw_string(1, 25, font_5x8,    "VWXYZabcdefghijklmno");
-    lcd_draw_string(1, 35, font_5x8,    "pqrstuvwxyz0123456789");
-    lcd_draw_string(1, 45, font_5x8,    "()[]<>!?,.;:*+-=/_%");
-    lcd_draw_string(1, 55, font_5x8,    "5. April, 2025");
+    lcd_draw_string(1, 25, font_5x8,    "VWXYZabcdefghijklmnop");
+    lcd_draw_string(1, 35, font_5x8,    "qrstuvwxyz0123456789|");
+    lcd_draw_string(1, 45, font_5x8,    "()[]<>!?,.;:*+-=/_%@~");
+    lcd_draw_string(1, 55, font_5x8,    "&#      17. May, 2025");
 
+    lcd_display();
+    transition();
+
+    lcd_draw_string(2, 0, font_10x16,  "ABCDEFGHIJK");
+    lcd_draw_string(2, 16, font_10x16, "LMNOPQRSTUV");
+    lcd_draw_string(2, 32, font_10x16, "WXYZabcdefg");
+    lcd_draw_string(2, 48, font_10x16, "ijklmnopqrs");
+
+    lcd_display();
+    sleep_ms(2000);
+    lcd_clear_buffer();
+
+    lcd_draw_string(2, 0, font_10x16,  "tuvwxyz0123");
+    lcd_draw_string(2, 16, font_10x16, "456789|()[]");
+    lcd_draw_string(2, 32, font_10x16, "<>!?,.:*+-=");
+    lcd_draw_string(2, 48, font_10x16, "_%/@~&#");
+   
     lcd_display();
     transition();
 

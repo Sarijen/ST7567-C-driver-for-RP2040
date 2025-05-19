@@ -56,8 +56,8 @@ Your bitmap image has to be rotated 90° and flipped horizontally
 ### void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character)
 Draws a single character at `x y` with specified font.  
 There are 2 built-in fonts, `font_5x8` and `font_10x16`.  
-Built-in fonts are limited to ASCII and do not include `~ $ @ |  ^ # &` characters _yet_.  
-You can also make your custom fonts and use this function for them  
+Built-in fonts are limited to ASCII with the exception of "`^`" character.  
+You can also make your custom fonts and use this function for them   
 
 ### void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[])
 Draws a series of characters with 1 pixel spacing between them at x, y
