@@ -43,8 +43,10 @@ static const uint8_t reset =            0b11100010;
 
 void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[]) {
   uint8_t string_length = strlen(string);
-  for (uint8_t i = 0; i < string_length; i++) {
-    lcd_draw_character(x + ((font[0].width + 1) * i), y, font, string[i]);
+  uint8_t char_offset = font[0].width + 1;
+
+  for (uint8_t current_char = 0; current_char < string_length; i++) {
+    lcd_draw_character(x + (char_offset * current_char), y, font, string[current_char]);
   }
 }
 
@@ -146,12 +148,13 @@ void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value
   while (x1 != x2 || y1 != y2) {
     lcd_draw_pixel(x1, y1, value);
 
-    int16_t e2 = 2*error;
+    int16_t e2 = 2 * error;
     if (e2 > -dy) {
       error -= dy;
       x1 += sx;
     }
-    if (e2< dx) {
+
+    if (e2 < dx) {
       error += dx;
       y1 += sy;
     }
@@ -159,10 +162,10 @@ void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value
 }
 
 
-void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value) { // Calculates x, y to bits location in the buffer
+void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value) {
   if (x >= LCD_WIDTH || y > LCD_HEIGHT) {return;}
 
-  uint8_t page = y / 8; // Pages are 8bits high
+  uint8_t page = y / 8; // Pages are 8-bits high
   uint16_t byte_index = (LCD_WIDTH * page + x);
   uint8_t bit_position = (y % 8);
 
@@ -180,6 +183,7 @@ void lcd_flip(uint8_t horizontally, uint8_t vertically) {
     printf("Error: Flipping values can only be 0 or 1\n"); 
     return;
   }
+
   send_command((horizontally) ? comInvDirection : comDirection);
   send_command((vertically) ? segInvDirection : segDirection);
   lcd_display();
@@ -191,6 +195,7 @@ void lcd_shift_horizontally(uint8_t shift_amount) {
     printf("Warning: You cannot shift horizontally more than 63 pixels.\n");
     shift_amount = 63;
   }
+
   send_command(setStartLine | shift_amount);
 }
 
