@@ -2,6 +2,8 @@
 This driver allows you to control a ST7567 based LCD using SPI with the RP2040 MCU.
 It includes functions for initializing the display, drawing graphics and pixels using a framebuffer, dimming the backlight and more.
 
+> Keep in mind that this driver may not be stable, its still in development
+
 # Features
 - Clearable and easily writable framebuffer 
 - Drawing lines, rectangles, circles and individual pixels
