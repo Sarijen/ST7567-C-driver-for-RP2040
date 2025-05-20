@@ -4,7 +4,7 @@
 #include "../src/ST7567.h"
 #include "hardware/rtc.h"
 #include "pico/util/datetime.h"
-#include "pinout.h"
+#include "pinout.h" // You can edit your pins here
 
 uint16_t spi_frequency = 100; // kHz
 

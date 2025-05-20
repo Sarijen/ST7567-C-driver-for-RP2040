@@ -1,11 +1,11 @@
 // Code used to showcase features of this driver library
 
 #include "../src/ST7567.h"
-#include "pinout.h"
+#include "pinout.h" // You can edit your pins here
 #include "showcase_image.c"
 
 #define BLK_PIN 15
-#define DIMMING_FREQUENCY 1 // kHz
+#define DIMMING_FREQUENCY 5 // kHz
 
 uint16_t spi_frequency = 700; // kHz
 

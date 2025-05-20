@@ -16,35 +16,36 @@ This driver allows you to control ST7567 LCD using SPI with the RP2040. Made to 
 ###### This GIF is [showcase.c](examples/showcase.c) example code
 
 # Wiring Diagram
-- Wiring doesn't have to be exactly the same as shown below, just ensure you use `correct` SPI pins for your chosen instance (`SPI0` or `SPI1`)
-- `CS` pin can be connected to any GPIO pin you want, assuming you specify it correctly in your code
-
 
 <img src="images/wiringDiagram.png" width="550"/>  
 
-> Resistor for NC/LED pin is not stricly required 
+> This diagram shows the default pinout
 
-| Pico | Display |
-| :------: |:----:|
-| 3V3(OUT) | 3V3 |
-| GND | GND |
-| SPI TX | SDI |
-| SPI SCK | SCK |
-| Any GPIO | DC |
-| Any GPIO | CS |
-| Any GPIO | RST |
-| GND | NC/LED |  
+| Pico (Custom) | Pico (Default) | Display |
+| :------------:|:--------------:|:-------:|
+| GND           | GND            | GND     |
+| 3V3(OUT)      | 3V3(OUT)       | 3V3     |
+| Any SPI TX    | GPIO 19        | SDI     |
+| Any SPI SCK   | GPIO 18        | SCK     |
+| Any GPIO      | GPIO 22        | DC      |
+| Any GPIO      | GPIO 21        | CS      |
+| Any GPIO      | GPIO 20        | RST     |
+| [See Below](#for-fixed-backlighting)     | GND            | NC/LED  |
+
+Ensure you are using correct SPI pins for the corresponding SPI instace (SPI0 / SPI1)
+
+For example code you can edit your global pinout in [pinout.h](examples/pinout.h).
 
 
-For fixed backlighting:  
+##### For fixed backlighting:  
 - Connect a resistor from `NC/LED` to `GND`  
 
-For software controlled backlighting (PWM):  
+#### For software controlled backlighting (PWM):  
 - You will need a transistor/MOSFET  
 - Connect `NC/LED` to `Emitter`  
 - Connect MCU `GND` to `Collector`  
 - Connect `Base` to the GPIO you provided in the code  
-- Use lcd_enable_pwm_brightness and lcd_set_brightness functions
+- Use `lcd_enable_pwm_brightness` and `lcd_set_brightness` functions
 
 # Usage
 
@@ -82,4 +83,4 @@ For software controlled backlighting (PWM):
     #include "ST7567.h"
     ```
 
-4. Properly use the library, check `examples` folder for [API reference](examples/README.md) and proper usage.
+4. Properly use the library, check `examples` folder for [API reference](examples/README.md) and driver usage.

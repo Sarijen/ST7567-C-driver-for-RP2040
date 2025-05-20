@@ -2,7 +2,7 @@
 // Smiley face not required
 
 #include "../src/ST7567.h"
-#include "pinout.h"
+#include "pinout.h" // You can edit your pins here
 
 uint16_t spi_frequency = 100; // kHz
 

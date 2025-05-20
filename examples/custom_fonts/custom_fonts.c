@@ -2,7 +2,7 @@
 // Original font designs by Posy (Michiel de Boer) 2022 
 
 #include "../../src/ST7567.h"
-#include "../pinout.h"
+#include "../pinout.h" // You can edit your pins here
 
 // The custom fonts
 #include "seamless_segments.h"
