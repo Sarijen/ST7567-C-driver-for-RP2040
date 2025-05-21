@@ -1,12 +1,12 @@
 # ST7567 driver for RPi Pico (RP2040)
 This driver allows you to control ST7567 LCD using SPI with the RP2040. Made to easily test functionality of the display or be [integrated as a library to your project](#integrating-into-your-codebase)
 
-> Keep in mind that this driver may not be stable, its still in development
+> Keep in mind that this driver may not be stable, it s still in development
 
 # Features
 - Clearable and easily writable framebuffer 
-- Drawing lines, rectangles, circles and individual pixels
-- Drawing built-in or custom fonts
+- Drawing various graphics
+- Drawing built-in or custom bitmap fonts
 - Displaying bitmap images
 - PWM dimmable backlight
 
@@ -19,7 +19,7 @@ This driver allows you to control ST7567 LCD using SPI with the RP2040. Made to 
 
 <img src="images/wiringDiagram.png" width="550"/>  
 
-> This diagram shows the default pinout
+> This diagram shows the default wiring for examples
 
 | Pico (Custom) | Pico (Default) | Display |
 | :------------:|:--------------:|:-------:|
@@ -30,7 +30,7 @@ This driver allows you to control ST7567 LCD using SPI with the RP2040. Made to 
 | Any GPIO      | GPIO 22        | DC      |
 | Any GPIO      | GPIO 21        | CS      |
 | Any GPIO      | GPIO 20        | RST     |
-| [See Below](#for-fixed-backlighting)     | GND            | NC/LED  |
+| [See Below](#for-fixed-backlighting)     | GNiD | NC/LED |
 
 Ensure you are using correct SPI pins for the corresponding SPI instace (SPI0 / SPI1)
 
