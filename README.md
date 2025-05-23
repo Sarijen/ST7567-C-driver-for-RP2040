@@ -13,7 +13,11 @@ This driver allows you to control ST7567 LCD using SPI with the RP2040. Made to 
 # Showcase
 <img src="images/showcase.gif" width="300"/>
 
-###### This GIF is [showcase.c](examples/showcase.c) example code
+###### This GIF is [showcase.c](examples/showcase.c) example code  
+
+<img src="image/digital_clock_example.jpg" width="350"/>
+
+###### This is [digital_clock.c](examples/digital_clock.c) example code
 
 # Wiring Diagram
 
