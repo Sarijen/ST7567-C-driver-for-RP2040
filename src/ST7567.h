@@ -20,13 +20,13 @@ typedef struct {
   uint8_t DC;      // A0 in the datasheet
   uint8_t CS;
   uint8_t RST;
-} spiConfig;
+} spi_config_t;
 
 typedef struct {
   uint8_t slice_num;
   uint16_t wrapping_point;
   uint8_t pin;
-} pwmConfig;
+} pwm_config_t;
 
 static inline void send_command(uint8_t command);
 static inline void send_data(uint8_t data);
@@ -37,7 +37,7 @@ void lcd_spi_init(
     uint8_t DC,
     uint8_t CS,
     uint8_t RST,
-    uint16_t frequency); // in kHz
+    uint16_t spi_frequency); // in kHz
 
 void lcd_init(void);
 void lcd_reset(void);

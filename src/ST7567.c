@@ -1,6 +1,6 @@
 #include "ST7567.h"
 
-static spiConfig spi;
+static spi_config_t spi;
 
 #define LCD_WIDTH 128
 #define LCD_HEIGHT 64
@@ -138,7 +138,8 @@ void lcd_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t 
 }
 
 
-void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value) { // Bresenham's algorithm used
+void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value) {
+  // Bresenham's algorithm used
   uint8_t dx = abs(x2 - x1); 
   uint8_t dy = abs(y2 - y1);
   int8_t sx = (x1 < x2) ? 1 : -1;
@@ -174,13 +175,14 @@ void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value) {
   } else {
     frameBuffer[byte_index] |= (1 << bit_position);
   }
+
   //lcd_display(); // Sends the entire buffer after every pixel draw, VERY SLOW!
 }
 
 
 void lcd_flip(uint8_t horizontally, uint8_t vertically) {
   if (horizontally > 1 || vertically > 1) {
-    printf("Error: Flipping values can only be 0 or 1\n"); 
+    printf("[ST7567] Error: Flipping values can only be 0 or 1\n"); 
     return;
   }
 
@@ -192,7 +194,7 @@ void lcd_flip(uint8_t horizontally, uint8_t vertically) {
 
 void lcd_shift_horizontally(uint8_t shift_amount) {
   if (shift_amount > 63) {
-    printf("Warning: You cannot shift horizontally more than 63 pixels.\n");
+    printf("[ST7567] Warning: You cannot shift horizontally more than 63 pixels.\n");
     shift_amount = 63;
   }
 
@@ -212,15 +214,17 @@ void lcd_toggle_invert(void) {
 
 
 void lcd_display(void) {
-  for (uint8_t currentPage = 0; currentPage < PAGE_COUNT; currentPage++) { // Set the right Page and Col addresses
+// Loops through every byte in every page from the framebuffer and sends it
+
+  for (uint8_t currentPage = 0; currentPage < PAGE_COUNT; currentPage++) {
     send_command(setPageAddr | currentPage);
     send_command(setColAddrH); // Resets the Column Address for every page
     send_command(setColAddrL);
 
     uint16_t currentPageIndex = currentPage * LCD_WIDTH;
 
-    for (uint16_t byte = currentPageIndex; byte < currentPageIndex + LCD_WIDTH; byte++) { // Every page is 128 bytes long 
-      send_data(frameBuffer[byte]); // Sending bytes of buffer to the display
+    for (uint16_t byte = currentPageIndex; byte < currentPageIndex + LCD_WIDTH; byte++) {
+      send_data(frameBuffer[byte]);
     }
   }
 }
@@ -248,7 +252,7 @@ void lcd_clear_screen(void) { // Fills the screen with 0s
 }
 
 
-static pwmConfig pwm = {
+static pwm_config_t pwm = {
   .slice_num = 69, // (69 if doesn't exist)
   .wrapping_point = 0, 
   .pin = 15, 
@@ -271,13 +275,15 @@ void lcd_enable_pwm_brightness(uint8_t pin, uint8_t pwm_frequency) {
 
 void lcd_set_brightness(uint8_t duty_cycle) {
   if (pwm.slice_num == 69) {
-    printf("Error: You need to call lcd_enable_pwm_brigthness() first!\n");
+    printf("[ST7567] Error: You need to call lcd_enable_pwm_brigthness() first!\n");
     return;
   }
+
   if (duty_cycle > 100) {
     duty_cycle = 100;
-    printf("Warning: Brightness cannot exceed 100%, defaulted back to 100%.\n");
+    printf("[ST7567] Warning: Brightness cannot exceed 100%, defaulted back to 100%.\n");
   }
+
   if (duty_cycle == 0) {
     pwm_set_enabled(pwm.slice_num, false);
     return;
@@ -355,14 +361,7 @@ void lcd_spi_init(
     uint8_t DC,
     uint8_t CS,
     uint8_t RST,
-    uint16_t frequency) {
-
-  if (frequency > frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_SYS)) {
-    printf("Error: Specified %d kHz is higher than system frequency!\n", frequency);
-    return;
-  } else if (frequency > 20000) {
-    printf("Warning: Specified %d kHz SCLK is higher than 20MHz stated in the datasheet at 3.3V, 25°C.\n", frequency);
-  }
+    uint16_t spi_frequency) {
 
   spi.ID = spi_id;
   spi.MOSI = MOSI;
@@ -383,7 +382,16 @@ void lcd_spi_init(
   gpio_put(spi.DC, 0);
   gpio_put(spi.RST, 1);
 
-  spi_init(spi.ID, 1000 * frequency);
+  if (spi_frequency > 20000) {
+    printf("[ST7567] Warning: Specified SPI freq higher than 20MHz stated in the datasheet at 3.3V, 25°C.\n", spi_frequency);
+  }
+
+  uint32_t real_spi_frequency = spi_init(spi.ID, 1000 * spi_frequency);
+  if (spi_frequency > frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_SYS)) {
+    printf("[ST7567] Warning: Specified SPI freq higher than sys freq.");
+    printf("[ST7567] SPI freq set to %d kHz\n", real_spi_frequency / 1000); 
+  }
+
   gpio_set_function(spi.MOSI, GPIO_FUNC_SPI);
   gpio_set_function(spi.SCLK, GPIO_FUNC_SPI);
   spi_set_format(spi.ID,
