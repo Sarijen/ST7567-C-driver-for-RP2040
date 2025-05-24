@@ -1,7 +1,7 @@
 # ST7567 driver for RPi Pico (RP2040)
-This driver allows you to control ST7567 LCD using SPI with the RP2040. Made to easily test functionality of the display or be [integrated as a library to your project](#integrating-into-your-codebase)
+This RP2040 driver allows you to control ST7567 LCD using SPI. Made to quickly show functionality of the display or be [integrated as a library to your project](#integrating-into-your-codebase). Uses permissive MIT License
 
-> Keep in mind that this driver may not be stable, it s still in development
+> Keep in mind that this driver may not be stable and does not have all features, it is still in development
 
 # Features
 - Clearable and easily writable framebuffer 
@@ -11,7 +11,7 @@ This driver allows you to control ST7567 LCD using SPI with the RP2040. Made to 
 - PWM dimmable backlight
 
 # Showcase
-<img src="images/showcase.gif" width="300"/>
+<img src="images/showcase.gif" width="400"/>
 
 ###### This GIF is [showcase.c](examples/showcase.c) example code  
 
@@ -21,7 +21,7 @@ This driver allows you to control ST7567 LCD using SPI with the RP2040. Made to 
 
 # Wiring Diagram
 
-<img src="images/wiringDiagram.png" width="550"/>  
+<img src="images/wiringDiagram.png" width="600"/>  
 
 > This diagram shows the default wiring for examples
 
@@ -34,11 +34,11 @@ This driver allows you to control ST7567 LCD using SPI with the RP2040. Made to 
 | Any GPIO      | GPIO 22        | DC      |
 | Any GPIO      | GPIO 21        | CS      |
 | Any GPIO      | GPIO 20        | RST     |
-| [See Below](#for-fixed-backlighting)     | GNiD | NC/LED |
+| [See Below](#for-fixed-backlighting)     | GND | NC/LED |
 
 Ensure you are using correct SPI pins for the corresponding SPI instace (SPI0 / SPI1)
 
-For example code you can edit your global pinout in [pinout.h](examples/pinout.h).
+For example code you can edit pinout globaly in [pinout.h](examples/pinout.h).
 
 
 ##### For fixed backlighting:  
@@ -65,10 +65,10 @@ For example code you can edit your global pinout in [pinout.h](examples/pinout.h
     ```
 
 4. Compile using `make` in build/
-5. Flash the ST7567_example.uf2 located build/ 
+5. Flash the `ST7567_example.uf2` in build/ 
 
 6. To build different example code simply:  
-    Run `cmake .. -DBUILD_EXAMPLE=<example_name>` once   
+    Run `cmake .. -DBUILD_EXAMPLE=<example_name>`  
     Repeat steps 4. and 5.
 
 ## Integrating into your codebase
