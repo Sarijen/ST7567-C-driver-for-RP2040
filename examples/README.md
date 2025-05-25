@@ -1,11 +1,11 @@
-# API Reference
+# API Reference/Guide
 
 ### void lcd_spi_init(spi_inst_t* spi_id, uint8_t MOSI, uint8_t SCLK, uint8_t DC, uint8_t CS, uint8_t RST, uint16_t frequency)
 Inits SPI for the LCD, always required.  
 
 spi_id - SPI instance (SPI0 or SPI1)  
 frequency in `kHz`  
-I was able to run this display as high as `66MHz`! If you want to be safe stay below 20MHz - im not responsible for any damage!  
+I was able to run this display up to `62.5MHz` (SPI clock wouldn't go higher). If you want to be safe, stay below 20MHz - im not responsible for any damage!  
 
 ### lcd_init()
 Inits the display, always required.
@@ -21,23 +21,23 @@ For e.g. RR = 6, EV = 3 will have higher contrast than RR = 3, EV = 50.
 `Recommended values: RR = 4, EV = 31.`
 
 ### void lcd_clear_screen()
-Fills the entire display with 0s, does NOT touch the framebuffer.  
+Fills the entire display with 0s, does NOT touch the framebuffer.   
 
 ### void lcd_clear_buffer()
-Fills the entire buffer with 0s.  
+Fills the entire framebuffer with 0s.   
 
 ### void lcd_display()
-Sends the entire buffer to the display AKA "Refreshes it"
+Sends the entire framebuffer to the display - "Refreshes it"
 The stuff you drew will never be displayed until you call this function!!!
 
 ## Graphics
 
 > Note that "draw" functions only writes pixels to the buffer, you always have to call lcd_display() to actually see what you drew.
 
-> `uint8_t value` in draw functions represent "color" to draw. 0 = white ("erases pixels"), anything other = black ("draws pixels").
+> `value parameter` in draw functions represent "color" to draw. 0 = white ("erase pixel"), anything other = black ("draw pixel").
 
 ### void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value)
-Draws a single pixel at `x` `y` to the buffer.
+Draws a single pixel at `x` `y` to the framebuffer.
 
 ### void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value)
 Draws a line from `x1 y1` to `x2 y2`, works in all 4 quadrants, uses Bresenham's algorithm
@@ -65,19 +65,21 @@ Draws a series of characters with 1 pixel spacing between them at x, y
 ## Other
 
 ### void lcd_enable_pwm_brightness(uint8_t pin, uint8_t pwm_frequency)
-Inits PWM brightness, frequency in `kHz`
+Inits PWM for brightness
+Frequency argument in `kHz`
 Should work even if you underclocked/overclocked the MCU
 
 ### void lcd_set_brightness(uint8_t duty_cycle)
 Sets the brightness level using PWM  
 Duty cycle in % = brightness in %
+You have to call lcd_enable_pwm_brigthness first!
 
 ### void lcd_toggle_invert()
 Inverts all pixel values on the display, does NOT touch the framebuffer
 
 ### void lcd_shift_horizontally(uint8_t shift_amount)
 "Shifts" all pixels on the display, does NOT touch the framebuffer  
-Pixels that are moved outside overflow to beggining
+Pixels moved outside at the end overflow to the beggining
 
 ### void lcd_flip(uint8_t horizontally, uint8_t vertically)
 Flips the display content horizontally/vertically, does NOT touch the framebuffer

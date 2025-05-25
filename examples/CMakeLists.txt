@@ -20,8 +20,10 @@ elseif(BUILD_EXAMPLE STREQUAL "beta_example")
   add_executable(ST7567_example beta_example.c)
 
 else()
-  message(FATAL_ERROR "Unknown example '${BUILD_EXAMPLE}'")
+  message(SEND_ERROR "Unknown example '${BUILD_EXAMPLE}'")
+  message(FATAL_ERROR "Please choose one example: 'bare_minimum', 'showcase', 'digital_clock' or 'custom_fonts'")
 endif()
 
 target_link_libraries(ST7567_example PRIVATE ST7567)
+pico_enable_stdio_usb(ST7567_example 1)
 pico_add_extra_outputs(ST7567_example)

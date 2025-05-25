@@ -8,13 +8,13 @@ set(CMAKE_CXX_STANDARD 17)
 
 pico_sdk_init()
 
-
 add_library(ST7567 STATIC
   src/ST7567.c
   src/fonts.c
 )
 
 target_include_directories(ST7567 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
 target_link_libraries(
   ST7567
   pico_stdlib
