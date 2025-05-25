@@ -38,7 +38,7 @@ static uint8_t displayInverted = 0;
 
 // OTHER
 static const uint8_t NOP =              0b11100011;
-static const uint8_t reset =            0b11100010;
+static const uint8_t softwareReset =    0b11100010;
 
 
 void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[]) {
@@ -61,7 +61,7 @@ void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character) 
       break;
     }
 
-    // If a character that isn't supported is given, use the first character
+    // If given character is not in the table, use the 1st character
     // End of font table is indicated as a character with width = 0
     if (font[matching_char].width == 0) {
       bitmap_data = font[0].bitmap_data;
@@ -89,6 +89,8 @@ void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character) 
 
 
 void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t invert) {
+  if (x > LCD_WIDTH || y > LCD_HEIGHT) {return;}
+
   if (invert > 1) {invert = 1;}
 
   uint16_t currentByte = 0;
@@ -113,6 +115,8 @@ void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t
 
 
 void lcd_fill_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t value) {
+  if (x > LCD_WIDTH || y > LCD_HEIGHT) {return;}
+
   uint8_t dx = x + width;
   uint8_t dy = y + height;
 
@@ -125,6 +129,8 @@ void lcd_fill_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t 
 
 
 void lcd_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t value) {
+  if (x > LCD_WIDTH || y > LCD_HEIGHT) {return;}
+
   uint8_t dx = x + width; 
   uint8_t dy = y + height;
 
@@ -139,6 +145,8 @@ void lcd_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t 
 
 
 void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value) {
+  if (x1 > LCD_WIDTH || y1 > LCD_HEIGHT) {return;}
+
   // Bresenham's algorithm used
   uint8_t dx = abs(x2 - x1); 
   uint8_t dy = abs(y2 - y1);
@@ -164,10 +172,10 @@ void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value
 
 
 void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value) {
-  if (x >= LCD_WIDTH || y > LCD_HEIGHT) {return;}
+  if (x > LCD_WIDTH || y > LCD_HEIGHT) {return;}
 
   uint8_t page = y / 8; // Pages are 8-bits high
-  uint16_t byte_index = (LCD_WIDTH * page + x);
+  uint16_t byte_index = (LCD_WIDTH * page) + x;
   uint8_t bit_position = (y % 8);
 
   if (value == 0) {
@@ -326,7 +334,12 @@ static inline void send_data(uint8_t data) {
 }
 
 
-void lcd_reset(void) {
+void lcd_software_reset(void) {
+  send_command(softwareReset);
+}
+
+
+void lcd_hardware_reset(void) {
   gpio_put(spi.RST, 0);
   sleep_us(2);
   gpio_put(spi.RST, 1);
@@ -335,7 +348,7 @@ void lcd_reset(void) {
 
 
 void lcd_init(void) {
-  lcd_reset();
+  lcd_hardware_reset();
 
   send_command(displayOFF);
   send_command(selectBias);
