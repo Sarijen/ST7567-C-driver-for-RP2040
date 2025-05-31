@@ -45,6 +45,7 @@ void lcd_software_reset(void);
 void lcd_set_contrast(uint8_t RR_value, uint8_t EV_value);
 void lcd_enable_pwm_brightness(uint8_t pin, uint8_t pwm_frequency); // frequency in kHz
 void lcd_set_brightness(uint8_t duty_cycle); // in %
+void lcd_gosleep(void);
 
 void lcd_clear_screen(void);
 void lcd_clear_buffer(void);

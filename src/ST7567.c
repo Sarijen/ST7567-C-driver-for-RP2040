@@ -14,7 +14,7 @@ static const uint8_t EVmode =           0b10000001;
 static const uint8_t EVset =            0b00000000;
 static const uint8_t regRatio =         0b00100000;
 static const uint8_t selectBias =       0b10100011;
-static const uint8_t powerControl =     0b00101111;
+static const uint8_t powerControl =     0b00101000;
 
 static const uint8_t displayOFF =       0b10101110;
 static const uint8_t displayON =        displayOFF | 0x01;
@@ -221,24 +221,25 @@ void lcd_toggle_invert(void) {
 }
 
 
-void lcd_display(void) {
 // Loops through every byte in every page from the framebuffer and sends it
-
+void lcd_display(void) {
   for (uint8_t currentPage = 0; currentPage < PAGE_COUNT; currentPage++) {
     send_command(setPageAddr | currentPage);
     send_command(setColAddrH); // Resets the Column Address for every page
     send_command(setColAddrL);
 
     uint16_t currentPageIndex = currentPage * LCD_WIDTH;
+    uint16_t byte;
 
-    for (uint16_t byte = currentPageIndex; byte < currentPageIndex + LCD_WIDTH; byte++) {
+    for (byte = currentPageIndex; byte < currentPageIndex + LCD_WIDTH; byte++) {
       send_data(frameBuffer[byte]);
     }
   }
 }
 
 
-void lcd_clear_buffer(void) { // Fills the buffer on MCU with 0s
+// Fills the buffer on MCU with 0s
+void lcd_clear_buffer(void) {
   uint16_t frameBufferSize = LCD_WIDTH * PAGE_COUNT;
 
   for (uint16_t byte = 0; byte < frameBufferSize; byte++) {
@@ -247,7 +248,8 @@ void lcd_clear_buffer(void) { // Fills the buffer on MCU with 0s
 }
 
 
-void lcd_clear_screen(void) { // Fills the screen with 0s
+// Fills the screen with 0s
+void lcd_clear_screen(void) {
   for (uint8_t currentPage = 0; currentPage < PAGE_COUNT; currentPage++) {
     send_command(setPageAddr | currentPage);
     send_command(setColAddrH); 
@@ -318,24 +320,9 @@ void lcd_set_contrast(uint8_t RR_value, uint8_t EV_value) {
 }
 
 
-static inline void send_command(uint8_t command) {
-  gpio_put(spi.CS, 0);
-  spi_write_blocking(spi.ID, &command, 1);
-  gpio_put(spi.CS, 1);
-}
-
-
-static inline void send_data(uint8_t data) {
-  gpio_put(spi.DC, 1);
-  gpio_put(spi.CS, 0);
-  spi_write_blocking(spi.ID, &data, 1);
-  gpio_put(spi.CS, 1);
-  gpio_put(spi.DC, 0);
-}
-
-
 void lcd_software_reset(void) {
   send_command(softwareReset);
+  sleep_us(1);
 }
 
 
@@ -352,18 +339,30 @@ void lcd_init(void) {
 
   send_command(displayOFF);
   send_command(selectBias);
-  send_command(segDirection);
-  send_command(comInvDirection);
-  send_command(powerControl);
+  lcd_flip(1, 0);
+  send_command(powerControl | 0b111);
   sleep_us(50);
 
-  send_command(regRatio); 
-  send_command(EVmode);
-  send_command(EVset);
-
+  lcd_set_contrast(0x04, 0x1F);
   send_command(setStartLine);
   send_command(displayON);
   send_command(allPixelsNormal);
+}
+
+
+static inline void send_command(uint8_t command) {
+  gpio_put(spi.CS, 0);
+  spi_write_blocking(spi.ID, &command, 1);
+  gpio_put(spi.CS, 1);
+}
+
+
+static inline void send_data(uint8_t data) {
+  gpio_put(spi.DC, 1);
+  gpio_put(spi.CS, 0);
+  spi_write_blocking(spi.ID, &data, 1);
+  gpio_put(spi.CS, 1);
+  gpio_put(spi.DC, 0);
 }
 
 

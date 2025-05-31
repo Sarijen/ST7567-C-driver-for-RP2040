@@ -10,8 +10,10 @@ I was able to run this display up to `62.5MHz` (SPI clock wouldn't go higher). I
 ### lcd_init()
 Inits the display, always required.
 
-### void lcd_reset()
-Hardware resets the display.
+### void lcd_hardware_reset()
+Uses RST pin to hardware-reset the display.
+Everything is reset including all the pixel values.
+lcd_init() has to be called next, to continue using the display
 
 ### void lcd_set_contrast(uint8_t RR_value, uint8_t EV_value)
 Sets the display contrast  
@@ -74,6 +76,16 @@ Sets the brightness level using PWM
 Duty cycle in % = brightness in %
 You have to call lcd_enable_pwm_brigthness first!
 
+### void lcd_gosleep()
+Keeps the last image retained and goes to low power mode.  
+No other commands except lcd_wakeup are accepted in this mode!
+Display configuration won't be erased.  
+
+### void lcd_wakeup()
+Wakes the display from power save to normal mode, ready to display new image.  
+Call this only after lcd_gosleep() was called.  
+
+
 ### void lcd_toggle_invert()
 Inverts all pixel values on the display, does NOT touch the framebuffer
 
@@ -83,4 +95,10 @@ Pixels moved outside at the end overflow to the beggining
 
 ### void lcd_flip(uint8_t horizontally, uint8_t vertically)
 Flips the display content horizontally/vertically, does NOT touch the framebuffer
+
+
+### void lcd_software_reset()
+Uses internal command to reset the display.
+What it resets: contrast value, horizontal flip
+What it keeps: pixel values, vertical flip 
 
