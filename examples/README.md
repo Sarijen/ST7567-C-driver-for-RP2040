@@ -5,10 +5,11 @@ Inits SPI for the LCD, always required.
 
 spi_id - SPI instance (SPI0 or SPI1)  
 frequency in `kHz`  
-I was able to run this display up to `62.5MHz` (SPI clock wouldn't go higher). If you want to be safe, stay below 20MHz - im not responsible for any damage!  
+I was able to run this display up to `62.5MHz` (SPI clock wouldn't go higher). If you want to be safe, stay below 20MHz - I'm not responsible for any damage!  
 
 ### lcd_init()
 Inits the display, always required.
+Call after lcd_spi_init()!
 
 ### void lcd_hardware_reset()
 Uses RST pin to hardware-reset the display.
@@ -29,7 +30,7 @@ Fills the entire display with 0s, does NOT touch the framebuffer.
 Fills the entire framebuffer with 0s.   
 
 ### void lcd_display()
-Sends the entire framebuffer to the display - "Refreshes it"
+Sends the entire framebuffer to the display - "Refreshes it"  
 The stuff you drew will never be displayed until you call this function!!!
 
 ## Graphics
@@ -68,37 +69,36 @@ Draws a series of characters with 1 pixel spacing between them at x, y
 
 ### void lcd_enable_pwm_brightness(uint8_t pin, uint8_t pwm_frequency)
 Inits PWM for brightness
-Frequency argument in `kHz`
+Frequency argument in `kHz`  
 Should work even if you underclocked/overclocked the MCU
 
 ### void lcd_set_brightness(uint8_t duty_cycle)
-Sets the brightness level using PWM  
-Duty cycle in % = brightness in %
-You have to call lcd_enable_pwm_brigthness first!
+Sets the brightness level using PWM   
+Duty cycle in % = brightness in %  
+lcd_enable_pwm_brigthness has to be called first!
 
 ### void lcd_gosleep()
 Keeps the last image retained and goes to low power mode.  
-No other commands except lcd_wakeup are accepted in this mode!
+No other commands except lcd_wakeup are accepted in this mode!  
 Display configuration won't be erased.  
 
 ### void lcd_wakeup()
 Wakes the display from power save to normal mode, ready to display new image.  
-Call this only after lcd_gosleep() was called.  
-
+Call this only after lcd_gosleep() was called.   
 
 ### void lcd_toggle_invert()
-Inverts all pixel values on the display, does NOT touch the framebuffer
+Inverts all pixel values on the display, does NOT touch the framebuffer  
 
 ### void lcd_shift_horizontally(uint8_t shift_amount)
 "Shifts" all pixels on the display, does NOT touch the framebuffer  
 Pixels moved outside at the end overflow to the beggining
 
 ### void lcd_flip(uint8_t horizontally, uint8_t vertically)
-Flips the display content horizontally/vertically, does NOT touch the framebuffer
-
+Flips the display content horizontally/vertically, does NOT touch the framebuffer  
+Pass `1` as argument to flip, `0` to unflip   
+Keep in mind lcd_init() flips the display horizontaly by default!  
 
 ### void lcd_software_reset()
-Uses internal command to reset the display.
-What it resets: contrast value, horizontal flip
-What it keeps: pixel values, vertical flip 
-
+Uses built-in command to reset the display.  
+What it resets: contrast value, horizontal flip  
+What it keeps: pixel values, vertical flip  
