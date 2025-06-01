@@ -1,4 +1,4 @@
-// Code used to showcase features of this driver library
+// Example code used to showcase features of this driver library
 
 #include "../src/ST7567.h"
 #include "pinout.h" // You can edit your pins here
@@ -7,11 +7,11 @@
 #define BLK_PIN 15
 #define DIMMING_FREQUENCY 5 // kHz
 
-uint16_t spi_frequency = 700; // kHz
+uint16_t spi_frequency = 1000; // kHz
 
-void transition();
+void transition(void);
 
-int main() {
+int main(void) {
 // ==================== INIT ==============================
 
   lcd_spi_init(spi0, MOSI_PIN, SCLK_PIN, DC_PIN, CS_PIN, RST_PIN, spi_frequency);
@@ -25,6 +25,7 @@ int main() {
   lcd_set_contrast(4, 21);
  
   while(1) {
+
 // ==================== INTRO ==============================
 
     //              x   y   font type string
@@ -45,11 +46,17 @@ int main() {
 
 // ==================== ANIMATION TRANSITION ==============================
 
+  // Shift everything by 32 pixels, does not affect input pixel coordinates
+  lcd_shift_horizontally(32);
+
   for (int i = 127; i > 0; i--) {
     lcd_draw_line(i, 0, 127,   64, 1);
     lcd_draw_line(0, 0, 127-i, 64, 1);
     lcd_display();
   }
+
+  lcd_shift_horizontally(0);
+  sleep_ms(250);
   lcd_clear_buffer();
 
 
@@ -107,12 +114,17 @@ int main() {
 
 // ==================== ANIMATION TRANSITION ==============================
 
+  lcd_shift_horizontally(20);
+
   for (int i = 0; i < 64; i++) {
     lcd_draw_line(0, 63-i, 128, 63, 1);
     lcd_draw_line(0, 0,    128, i,  1);
     lcd_display();
     sleep_ms(2);
   }
+
+  lcd_shift_horizontally(0);
+  sleep_ms(250);
   lcd_clear_buffer();
 
 
@@ -131,7 +143,7 @@ int main() {
 // ==================== FONTS ==============================
 // Only font_5x8, font_10x16 and custom fonts are available
 
-    //              x   y  font struct  string
+    //              x   y  font name    string
     lcd_draw_string(25, 1, font_5x8,    "Bitmap fonts");
     lcd_draw_line(0, 10, 127, 10, 1);
     lcd_draw_string(1, 15, font_5x8,    "ABCDEFGHIJKLMNOPQRSTU");
@@ -169,26 +181,24 @@ int main() {
     lcd_display();
     sleep_ms(1000);
 
-    for (uint8_t percent = 100; percent > 0; percent--) {
+    for (uint8_t percent = 50; percent > 0; percent--) {
       lcd_set_brightness(percent);
-      sleep_ms(20);
+      sleep_ms(35);
     }
 
     lcd_set_brightness(0);
-    sleep_ms(1000);
-    lcd_set_brightness(30);
-    sleep_ms(1000);
-    lcd_set_brightness(60);
-    sleep_ms(1000);
-    lcd_set_brightness(90);
-    sleep_ms(1000);
+    sleep_ms(1500);
+    lcd_set_brightness(50);
+    sleep_ms(1500);
+    lcd_set_brightness(95);
+    sleep_ms(1500);
 
     lcd_set_brightness(50);
     lcd_clear_buffer();
   }
 }
 
-void transition() {
+void transition(void) {
   sleep_ms(3500);
   lcd_toggle_invert();
   sleep_ms(1000); 
