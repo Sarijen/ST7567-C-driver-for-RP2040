@@ -41,7 +41,7 @@ static const uint8_t NOP =              0b11100011;
 static const uint8_t softwareReset =    0b11100010;
 
 
-void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[]) {
+void lcd_draw_string(uint8_t x, uint8_t y, font_glyph* font, char string[]) {
   uint8_t string_length = strlen(string);
   uint8_t char_offset = font[0].width + 1;
 
@@ -51,7 +51,7 @@ void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[]) {
 }
 
 
-void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character) {
+void lcd_draw_character(uint8_t x, uint8_t y, font_glyph* font, char character) {
   const uint8_t* bitmap_data;
   uint16_t matching_char = 0;
 
