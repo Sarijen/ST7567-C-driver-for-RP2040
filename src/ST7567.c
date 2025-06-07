@@ -9,7 +9,7 @@ static spi_config_t spi;
 uint8_t frameBuffer[PAGE_COUNT * LCD_WIDTH]; // Contains 1024 Bytes, 128 Bytes per page
 
 // Commands defined in binary for clear understanding
-// # CONFIGURATION
+// CONFIGURATION
 static const uint8_t EVmode =           0b10000001;
 static const uint8_t EVset =            0b00000000;
 static const uint8_t regRatio =         0b00100000;
@@ -19,7 +19,7 @@ static const uint8_t powerControl =     0b00101000;
 static const uint8_t displayOFF =       0b10101110;
 static const uint8_t displayON =        displayOFF | 0x01;
 
-// # PIXEL DATA MANIPULATION
+// PIXEL DATA MANIPULATION
 static const uint8_t setStartLine =     0b01000000;
 static const uint8_t allPixelsNormal =  0b10100100;
 static const uint8_t allPixelsON =      allPixelsNormal | 0x01;
@@ -41,17 +41,21 @@ static const uint8_t NOP =              0b11100011;
 static const uint8_t softwareReset =    0b11100010;
 
 
+
 void lcd_draw_string(uint8_t x, uint8_t y, font_glyph* font, char string[]) {
   uint8_t string_length = strlen(string);
   uint8_t char_offset = font[0].width + 1;
 
   for (uint8_t current_char = 0; current_char < string_length; current_char++) {
+    if (string[current_char] == ' ') {continue;}
     lcd_draw_character(x + (char_offset * current_char), y, font, string[current_char]);
   }
 }
 
 
 void lcd_draw_character(uint8_t x, uint8_t y, font_glyph* font, char character) {
+  if (character == ' ') {return;}
+
   const uint8_t* bitmap_data;
   uint16_t matching_char = 0;
 

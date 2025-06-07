@@ -7,9 +7,10 @@
 #define BLK_PIN 15
 #define DIMMING_FREQUENCY 5 // kHz
 
-uint16_t spi_frequency = 1000; // kHz
+uint16_t spi_frequency = 1500; // kHz
 
 void transition(void);
+
 
 int main(void) {
 // ==================== INIT ==============================
@@ -145,7 +146,7 @@ int main(void) {
 
     //              x   y  font name    string
     lcd_draw_string(25, 1, font_5x8,    "Bitmap fonts");
-    lcd_draw_line(0, 10, 127, 10, 1);
+    lcd_draw_line(0, 10, 127, 10, 1); // ---------------------
     lcd_draw_string(1, 15, font_5x8,    "ABCDEFGHIJKLMNOPQRSTU");
     lcd_draw_string(1, 25, font_5x8,    "VWXYZabcdefghijklmnop");
     lcd_draw_string(1, 35, font_5x8,    "qrstuvwxyz0123456789|");
@@ -161,7 +162,7 @@ int main(void) {
     lcd_draw_string(2, 48, font_10x16, "ijklmnopqrs");
 
     lcd_display();
-    sleep_ms(2000);
+    sleep_ms(2500);
     lcd_clear_buffer();
 
     lcd_draw_string(2, 0, font_10x16,  "tuvwxyz0123");
@@ -170,7 +171,8 @@ int main(void) {
     lcd_draw_string(2, 48, font_10x16, "_%/@~&#");
    
     lcd_display();
-    transition();
+    sleep_ms(2500);
+    lcd_clear_buffer();
 
 
 // ==================== PWM BRIGHTNESS ==============================
@@ -199,9 +201,9 @@ int main(void) {
 }
 
 void transition(void) {
-  sleep_ms(3500);
+  sleep_ms(3300);
   lcd_toggle_invert();
-  sleep_ms(1000); 
+  sleep_ms(800); 
   lcd_toggle_invert();
   lcd_clear_buffer();
 }
