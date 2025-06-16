@@ -134,8 +134,8 @@ int main(void) {
     lcd_draw_string(20, 1, font_5x8, "Bitmap images");
 
 //                 image array     x   y   w   h  invert (True/False)
-    lcd_draw_image(showcase_image, 5,  10, 48, 56, 0);
-    lcd_draw_image(showcase_image, 71, 10, 48, 56, 1);
+    lcd_draw_image(showcase_image, 5,  10, 45, 55, 0);
+    lcd_draw_image(showcase_image, 71, 10, 45, 55, 1);
 
     lcd_display();
     transition();
