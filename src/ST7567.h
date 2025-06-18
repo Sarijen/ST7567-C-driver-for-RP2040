@@ -58,7 +58,7 @@ void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value);
 void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value);
 void lcd_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t value);
 void lcd_fill_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t value);
-void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t invert);
+void lcd_draw_image(const uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t invert);
 void lcd_draw_character(uint8_t x, uint8_t y, font_glyph* font, char character);
 void lcd_draw_string(uint8_t x, uint8_t y, font_glyph* font, char string[]);
 
