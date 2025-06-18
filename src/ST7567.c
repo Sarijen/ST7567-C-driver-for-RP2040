@@ -75,7 +75,7 @@ void lcd_draw_character(uint8_t x, uint8_t y, font_glyph* font, char character) 
     matching_char++;
   }
 
-  lcd_draw_image(bitmap_data, x, y, font[0].width, font[0].height, 0);
+  lcd_draw_image(bitmap_data, x, y, font[matching_char].width, font[matching_char].height, 0);
 }
 
 

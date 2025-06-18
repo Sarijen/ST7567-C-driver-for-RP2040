@@ -5,6 +5,6 @@
 
 #define TABLE_SIZE_FREEFORM 12
 
-extern font_table freeform_segments[TABLE_SIZE_FREEFORM];
+extern font_glyph freeform_segments[TABLE_SIZE_FREEFORM];
 
 #endif
