@@ -75,20 +75,7 @@ void lcd_draw_character(uint8_t x, uint8_t y, font_glyph* font, char character) 
     matching_char++;
   }
 
-  // Draw our character
-  uint16_t currentByte = 0;
-  for (uint8_t i = x; i < x + font[matching_char].width; i++) {
-    int currentY = y;
-    for (uint8_t j = 0; j < (font[matching_char].height / 8); j++) {
-      for (uint8_t bit = 0; bit < 8; bit++) {
-        if (!((bitmap_data[currentByte] >> bit) & 1)) {
-          lcd_draw_pixel(i, currentY, 1);
-        }
-        currentY++;
-      }
-      currentByte++;
-    }
-  }
+  lcd_draw_image(bitmap_data, x, y, font[0].width, font[0].height, 0);
 }
 
 
