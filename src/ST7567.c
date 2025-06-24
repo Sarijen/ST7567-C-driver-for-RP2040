@@ -86,14 +86,14 @@ void lcd_draw_image(const uint8_t* image, uint8_t x, uint8_t y, uint8_t width, u
   uint8_t bytes_per_row = (width / 8);
   if ((width % 8) != 0) {bytes_per_row += 1;}
 
-  for (int8_t xi = 0; xi < width; xi++) {
-    for (int8_t yi = 0; yi < height; yi++) {
+  for (int8_t img_x = 0; img_x < width; img_x++) {
+    for (int8_t img_y = 0; img_y < height; img_y++) {
 
-      uint16_t byte_index = (yi * bytes_per_row) + (xi / 8);
-      uint8_t bit_index = 7 - (xi % 8);
+      uint16_t byte_index = (img_y * bytes_per_row) + (img_x / 8);
+      uint8_t bit_index = 7 - (img_x % 8);
 
       if (((image[byte_index] >> bit_index) & 1) == invert) {
-        lcd_draw_pixel(xi + x , yi + y, 1); 
+        lcd_draw_pixel(img_x + x , img_x + y, 1); 
       }
     }
   }
