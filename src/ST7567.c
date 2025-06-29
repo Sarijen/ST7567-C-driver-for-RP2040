@@ -93,7 +93,7 @@ void lcd_draw_image(const uint8_t* image, uint8_t x, uint8_t y, uint8_t width, u
       uint8_t bit_index = 7 - (img_x % 8);
 
       if (((image[byte_index] >> bit_index) & 1) == invert) {
-        lcd_draw_pixel(img_x + x , img_x + y, 1); 
+        lcd_draw_pixel(img_x + x , img_y + y, 1); 
       }
     }
   }
