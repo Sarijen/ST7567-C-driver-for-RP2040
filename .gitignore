@@ -1,4 +1,3 @@
 build/
 examples/beta_example.c
-examples/pinout.h
 *.swp
