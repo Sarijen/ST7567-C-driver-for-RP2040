@@ -25,7 +25,7 @@ This RP2040 driver allows you to control ST7567 LCD using SPI. Made to quickly s
 
 > This diagram shows the default wiring for examples
 
-| Pico (Custom) | Pico (Default) | Display |
+| Pico (Custom) | Pico (Default) | Display|
 | :------------:|:--------------:|:-------:|
 | GND           | GND            | GND     |
 | 3V3(OUT)      | 3V3(OUT)       | 3V3     |
@@ -34,22 +34,24 @@ This RP2040 driver allows you to control ST7567 LCD using SPI. Made to quickly s
 | Any GPIO      | GPIO 22        | DC      |
 | Any GPIO      | GPIO 21        | CS      |
 | Any GPIO      | GPIO 20        | RST     |
-| [See Below](#for-fixed-backlighting)     | GND | NC/LED |
+| [See Below](#for-fixed-backlighting)     | GND | LED |  
 
-Ensure you are using correct SPI pins for the corresponding SPI instace (SPI0 / SPI1)
+> Ensure you are using correct SPI pins for the corresponding SPI instace (SPI0 / SPI1)
 
 For example code you can edit pinout globaly in [pinout.h](examples/pinout.h).
 
-
 ##### For fixed backlighting:  
-- Connect a resistor from `NC/LED` to `GND`  
+- Connect a resistor from `LED` to `GND`  
 
 #### For software controlled backlighting (PWM):  
 - You will need a transistor/MOSFET  
-- Connect `NC/LED` to `Emitter`  
+- Connect `LED` pin to `Emitter`  
 - Connect MCU `GND` to `Collector`  
 - Connect `Base` to the GPIO you provided in the code  
 - Use `lcd_enable_pwm_brightness` and `lcd_set_brightness` functions
+
+> [!NOTE]  
+> If your board has `NC` pin where `LED` pin should be instead, it might not have LED backlight at all. In that case, you probably shouldn't connect it 
 
 # Usage
 
