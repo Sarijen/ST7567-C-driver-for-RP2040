@@ -5,6 +5,6 @@
 
 #define TABLE_SIZE_X15 11
 
-extern font_table x15_segments[TABLE_SIZE_X15];
+extern font_glyph x15_segments[TABLE_SIZE_X15];
 
 #endif

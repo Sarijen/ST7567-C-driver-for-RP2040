@@ -10,6 +10,7 @@
 uint16_t spi_frequency = 1500; // kHz
 
 void transition(void);
+void display_brigthness_level(uint8_t brightness_level);
 
 
 int main(void) {
@@ -121,7 +122,7 @@ int main(void) {
     lcd_draw_line(0, 63-i, 128, 63, 1);
     lcd_draw_line(0, 0,    128, i,  1);
     lcd_display();
-    sleep_ms(2);
+    sleep_ms(3);
   }
 
   lcd_shift_horizontally(0);
@@ -134,8 +135,8 @@ int main(void) {
     lcd_draw_string(20, 1, font_5x8, "Bitmap images");
 
 //                 image array     x   y   w   h  invert (True/False)
-    lcd_draw_image(showcase_image, 5,  10, 48, 56, 0);
-    lcd_draw_image(showcase_image, 71, 10, 48, 56, 1);
+    lcd_draw_image(showcase_image, 5,  10, 45, 55, 0);
+    lcd_draw_image(showcase_image, 71, 10, 45, 55, 1);
 
     lcd_display();
     transition();
@@ -162,7 +163,7 @@ int main(void) {
     lcd_draw_string(2, 48, font_10x16, "ijklmnopqrs");
 
     lcd_display();
-    sleep_ms(2500);
+    sleep_ms(3000);
     lcd_clear_buffer();
 
     lcd_draw_string(2, 0, font_10x16,  "tuvwxyz0123");
@@ -171,7 +172,7 @@ int main(void) {
     lcd_draw_string(2, 48, font_10x16, "_%/@~&#");
    
     lcd_display();
-    sleep_ms(2500);
+    sleep_ms(30000);
     lcd_clear_buffer();
 
 
@@ -179,31 +180,65 @@ int main(void) {
 
     lcd_draw_string(3, 1, font_10x16, "PWM");
     lcd_draw_string(3, 20, font_10x16, "Brightness");
-    lcd_draw_string(3, 40, font_10x16, "Control");
+    lcd_draw_string(3, 40, font_10x16, "50%");
     lcd_display();
-    sleep_ms(1000);
+    sleep_ms(1500);
 
+    // 50% -> 0%
     for (uint8_t percent = 50; percent > 0; percent--) {
       lcd_set_brightness(percent);
-      sleep_ms(35);
+      display_brigthness_level(percent);
+      sleep_ms(55);
     }
 
-    lcd_set_brightness(0);
-    sleep_ms(1500);
-    lcd_set_brightness(50);
-    sleep_ms(1500);
-    lcd_set_brightness(95);
-    sleep_ms(1500);
+    // 0 -> 50% Inverted
+    lcd_toggle_invert();
+    for (uint8_t percent = 50; percent > 0; percent--) {
+      lcd_set_brightness(percent);
+      display_brigthness_level(percent);
+      sleep_ms(55);
+    }
+    lcd_toggle_invert();
 
+
+    // - 0% -
+    lcd_set_brightness(0);
+    display_brigthness_level(0);
+    sleep_ms(2000);
+
+    // - 50% -
+    lcd_set_brightness(50);
+    display_brigthness_level(50);
+    sleep_ms(2000);
+
+    // - 95% -
+    lcd_set_brightness(95);
+    display_brigthness_level(95);
+    sleep_ms(2000);
+
+    // Reset to 50%
     lcd_set_brightness(50);
     lcd_clear_buffer();
   }
 }
 
+
 void transition(void) {
-  sleep_ms(3300);
+  sleep_ms(3500);
   lcd_toggle_invert();
-  sleep_ms(800); 
+  sleep_ms(1500); 
   lcd_toggle_invert();
   lcd_clear_buffer();
+}
+
+
+void display_brigthness_level(uint8_t brightness_level) {
+  lcd_clear_buffer();
+  lcd_draw_string(3, 1, font_10x16, "PWM");
+  lcd_draw_string(3, 20, font_10x16, "Brightness");
+
+  char brightness_str[15];
+  snprintf(brightness_str, sizeof(brightness_str), "%d%%", brightness_level);
+  lcd_draw_string(3, 40, font_10x16, brightness_str);
+  lcd_display();
 }

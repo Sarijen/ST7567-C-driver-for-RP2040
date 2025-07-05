@@ -1,14 +1,13 @@
 # API Reference
 
 ### void lcd_spi_init(spi_inst_t* spi_id, uint8_t MOSI, uint8_t SCLK, uint8_t DC, uint8_t CS, uint8_t RST, uint16_t frequency)
-Inits SPI for the LCD, always required.  
-
+Initializes SPI for the LCD, always required.  
 spi_id - SPI instance (SPI0 or SPI1)  
 frequency in `kHz`  
 I was able to run this display up to `62.5MHz` (SPI clock wouldn't go higher). If you want to be safe, stay below 20MHz. - I'm not responsible for any damage!  
 
 ### lcd_init()
-Inits the display, always required.
+Initializes the display, always required.
 Call only after lcd_spi_init()!
 
 ### void lcd_hardware_reset()
@@ -54,13 +53,14 @@ Draws a fully filled rectangle at `x y` with `width` and `height`.
 ### void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t invert)
 Draws a bitmap image at `x y` with `width` and `height`  
 First argument expects 1D uint8_t array.  
-Your bitmap image has to be rotated 90° and flipped horizontally.  
+You can convert images using [Javl's project](https://javl.github.io/image2cpp/) easily.  
 
 ### void lcd_draw_character(uint8_t x, uint8_t y, font_table* font, char character)
 Draws a single character at `x y` with specified font.  
 There are 2 built-in fonts, `font_5x8` and `font_10x16`.  
 Built-in fonts are limited to ASCII with the exception of "`^`" character.  
-You can also make your custom fonts and use this function for them.   
+You can also make your custom fonts and use this function for them   
+Again, [Javl's project](https://javl.github.io/image2cpp/) can be used to make custom fonts, it may take you a while tho.
 
 ### void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[])
 Draws a series of characters with 1 pixel spacing between them at x, y.  
@@ -69,13 +69,13 @@ Doesn't handle line breaks.
 ## Other
 
 ### void lcd_enable_pwm_brightness(uint8_t pin, uint8_t pwm_frequency)
-Inits PWM for brightness.  
+Initializes PWM (Pulse Width Modulation) for brightness control  
 Frequency argument in `kHz`.  
 Should work even if you underclocked/overclocked the MCU.  
 
 ### void lcd_set_brightness(uint8_t duty_cycle)
-Sets the brightness level using PWM.  
-Duty cycle in % = brightness in %.  
+Sets the brightness level using PWM  
+Duty cycle in % = brightness in % (Range is 0..100)  
 lcd_enable_pwm_brigthness has to be called first!
 
 ### void lcd_gosleep()

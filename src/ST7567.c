@@ -75,44 +75,26 @@ void lcd_draw_character(uint8_t x, uint8_t y, font_glyph* font, char character) 
     matching_char++;
   }
 
-  // Draw our character
-  uint16_t currentByte = 0;
-  for (uint8_t i = x; i < x + font[matching_char].width; i++) {
-    int currentY = y;
-    for (uint8_t j = 0; j < (font[matching_char].height / 8); j++) {
-      for (uint8_t bit = 0; bit < 8; bit++) {
-        if (!((bitmap_data[currentByte] >> bit) & 1)) {
-          lcd_draw_pixel(i, currentY, 1);
-        }
-        currentY++;
-      }
-      currentByte++;
-    }
-  }
+  lcd_draw_image(bitmap_data, x, y, font[matching_char].width, font[matching_char].height, 0);
 }
 
 
-void lcd_draw_image(uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t invert) {
+void lcd_draw_image(const uint8_t* image, uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t invert) {
   if (x > LCD_WIDTH || y > LCD_HEIGHT) {return;}
-
   if (invert > 1) {invert = 1;}
 
-  uint16_t currentByte = 0;
-  for (int8_t i = x; i < x + width; i++) { // Individual columns
-    uint16_t currentY = y;
+  uint8_t bytes_per_row = (width / 8);
+  if ((width % 8) != 0) {bytes_per_row += 1;}
 
-    for (int8_t j = 0; j < (height / 8); j++) {  // Individual bytes in 1 col
+  for (int8_t img_x = 0; img_x < width; img_x++) {
+    for (int8_t img_y = 0; img_y < height; img_y++) {
 
-      for (int8_t bit = 7; bit >= 0; bit--) {  // Individual bits in 1 byte
+      uint16_t byte_index = (img_y * bytes_per_row) + (img_x / 8);
+      uint8_t bit_index = 7 - (img_x % 8);
 
-        if (((image[currentByte] >> bit) & 1) == invert) {
-          lcd_draw_pixel(i, currentY, 1); 
-        }
-
-        currentY++;
+      if (((image[byte_index] >> bit_index) & 1) == invert) {
+        lcd_draw_pixel(img_x + x , img_y + y, 1); 
       }
-
-      currentByte++;
     }
   }
 }

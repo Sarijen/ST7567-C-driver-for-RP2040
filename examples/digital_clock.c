@@ -21,11 +21,11 @@ datetime_t t = {
   .sec = 39 
 };
 
-char clock_string[10];
+char clock_string[9];
 char date_string[11];
 char day_string[10];
 
-int main() {
+int main(void) {
   // RTC
   rtc_init();
   rtc_set_datetime(&t);
@@ -38,12 +38,12 @@ int main() {
   lcd_clear_screen();
   lcd_set_contrast(4, 21);
 
-  while (1 == 1) {
+  while (1) {
     rtc_get_datetime(&t);
 
-    sprintf(clock_string, "%d:%d:%d", t.hour, t.min, t.sec); // 17:54:39
-    sprintf(date_string, "%d/%d/%d", t.day, t.month, t.year); // 2/4/2025 (2. April)
-    sscanf(datetime_buf, "%s", day_string); // Wednesday
+    snprintf(clock_string, sizeof(clock_string), "%02d:%02d:%02d", t.hour, t.min, t.sec); // 17:54:39
+    snprintf(date_string, sizeof(date_string), "%02d/%02d/%d", t.day, t.month, t.year); //  2/4/2025 (2. April)
+    sscanf(datetime_buf, "%10s", day_string); // Wednesday
   
     lcd_clear_buffer();
     
@@ -54,4 +54,6 @@ int main() {
     lcd_display();
     sleep_ms(1000);
   }
+
+  return 0;
 }
