@@ -3,17 +3,17 @@
 ### void lcd_spi_init(spi_inst_t* spi_id, uint8_t MOSI, uint8_t SCLK, uint8_t DC, uint8_t CS, uint8_t RST, uint16_t frequency)
 Initializes SPI for the LCD, always required.  
 spi_id - SPI instance (SPI0 or SPI1)  
-frequency in `kHz`  
-I was able to run this display up to `62.5MHz` (SPI clock wouldn't go higher). If you want to be safe, stay below 20MHz. - I'm not responsible for any damage!  
+Frequency in `kHz`  
+I was able to run this display up to 62.5MHz (MCU SPI clock wouldn't go higher). If you want to be safe, stay below 20MHz. I'm not responsible for any damage.  
 
 ### lcd_init()
 Initializes the display, always required.
-Call only after lcd_spi_init()!
+Call only after lcd_spi_init()!  
 
 ### void lcd_hardware_reset()
 Uses RST pin to hardware-reset the display.
 Everything is reset including all the pixel values.
-To continue using the display as normal, lcd_init() has to be called next.
+To continue using the display, lcd_init() has to be called first.
 
 ### void lcd_set_contrast(uint8_t RR_value, uint8_t EV_value)
 Sets the display contrast  
@@ -34,12 +34,12 @@ The stuff you drew will never be displayed until you call this function!!!
 
 ## Graphics
 
-> Note that "draw" functions only writes pixels to the buffer, you always have to call lcd_display() to actually see what you drew.
+> Note that "draw" functions only writes pixels to the buffer, you always have to call lcd_display() to actually show what you drew.
 
 > `value parameter` in draw functions represent "color" to draw. 0 = white ("erase pixel"), anything other = black ("draw pixel").
 
 ### void lcd_draw_pixel(uint8_t x, uint8_t y, uint8_t value)
-Draws a single pixel at `x` `y` to the framebuffer.  
+Draws a single pixel at `x y` to the framebuffer.  
 
 ### void lcd_draw_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t value)
 Draws a line from `x1 y1` to `x2 y2`, works in all 4 quadrants, uses Bresenham's algorithm.  
@@ -63,14 +63,14 @@ You can also make your custom fonts and use this function for them
 Again, [Javl's project](https://javl.github.io/image2cpp/) can be used to make custom fonts, it may take you a while tho.
 
 ### void lcd_draw_string(uint8_t x, uint8_t y, font_table* font, char string[])
-Draws a series of characters with 1 pixel spacing between them at x, y.  
+Draws a series of characters with 1 pixel spacing between them at `x y`.  
 Doesn't handle line breaks.  
 
 ## Other
 
 ### void lcd_enable_pwm_brightness(uint8_t pin, uint8_t pwm_frequency)
 Initializes PWM (Pulse Width Modulation) for brightness control  
-Frequency argument in `kHz`.  
+Frequency in `kHz`.  
 Should work even if you underclocked/overclocked the MCU.  
 
 ### void lcd_set_brightness(uint8_t duty_cycle)
@@ -88,7 +88,7 @@ Wakes the display from power save to normal mode, ready to display new image.
 Call this only after lcd_gosleep() was called.   
 
 ### void lcd_toggle_invert()
-Inverts all pixel values on the display, does NOT touch the framebuffer.  
+Inverts all pixel values on the display until called again, does NOT touch the framebuffer.  
 
 ### void lcd_shift_horizontally(uint8_t shift_amount)
 "Shifts" all pixels on the display, does NOT touch the framebuffer.  
@@ -97,10 +97,10 @@ Pixels moved outside at the end overflow to the beggining.
 ### void lcd_flip(uint8_t horizontally, uint8_t vertically)
 Flips the display content horizontally/vertically, does NOT touch the framebuffer.  
 Pass `1` as argument to flip, `0` to unflip.   
-Keep in mind lcd_init() flips the display horizontaly by default!  
+lcd_init() flips the display horizontaly by default!  
 
 ### void lcd_software_reset()
 Uses built-in command to reset the display.  
 What it resets: contrast value, horizontal flip  
 What it keeps: pixel values, vertical flip  
-No need to call lcd_init() after software reset.  
+No need to call lcd_init() after a software reset.  
